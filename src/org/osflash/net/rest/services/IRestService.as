@@ -1,5 +1,7 @@
 package org.osflash.net.rest.services
 {
+	import org.osflash.net.rest.actions.IRestAction;
+	import org.osflash.signals.ISignal;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -7,5 +9,11 @@ package org.osflash.net.rest.services
 	{
 		
 		function get name() : String;
+		
+		function get action() : IRestAction;
+		
+		function get errorSignal() : ISignal;
+		
+		function get completedSignal() : ISignal;
 	}
 }
