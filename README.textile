@@ -1,0 +1,5 @@
+h1. AS3-Net
+
+AS3-Net is a attempt to provide the a standardised way to connect via the network.
+
+AS3-Stream uses the "MIT":http://en.wikipedia.org/wiki/MIT_License license.
