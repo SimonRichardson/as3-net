@@ -7,14 +7,24 @@ package org.osflash.net.rest
 	 */
 	public class Rest
 	{
-
+		
 		public function Rest()
 		{
 		}
-
+		
 		public function add(service : IRestService) : IRestService
 		{
 			return service;
+		}
+		
+		public function remove(service : IRestService) : IRestService
+		{
+			return service;
+		}
+		
+		public function contains(service : IRestService) : Boolean
+		{
+			return false;
 		}
 	}
 }

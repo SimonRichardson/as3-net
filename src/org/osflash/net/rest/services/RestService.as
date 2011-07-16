@@ -66,7 +66,7 @@ package org.osflash.net.rest.services
 		 */
 		public function get completedSignal() : ISignal
 		{
-			if(null == _completedSignal) _completedSignal = new Signal();
+			if(null == _completedSignal) _completedSignal = new Signal(IRestService);
 			return _completedSignal;
 		}
 	}

@@ -13,11 +13,17 @@ package org.osflash.net.rest.services.echo
 		/**
 		 * @private
 		 */
-		private var _action : IRestAction;
+		private var _action : EchoAction;
 		
 		public function EchoService(value : String)
 		{
 			_action = new EchoAction();
+			_action.parameter.value = value;
+		}
+		
+		public function response() : String
+		{
+			return '';
 		}
 		
 		/**

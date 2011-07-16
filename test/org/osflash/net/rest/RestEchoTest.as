@@ -1,6 +1,8 @@
 package org.osflash.net.rest
 {
 	import asunit.asserts.assertEquals;
+	import asunit.asserts.assertNotNull;
+	import asunit.asserts.assertTrue;
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
 
@@ -39,9 +41,13 @@ package org.osflash.net.rest
 			_rest.add(service);
 		}
 		
-		private function handleCompletedSignal(response : IRestResponse) : void
+		private function handleCompletedSignal(service : IRestService) : void
 		{
-			assertEquals('Rest result should equal ping', 'ping', response.content);
+			const echoService : EchoService = service as EchoService;
+			
+			assertTrue('Service should be EchoService', service is EchoService);
+			assertNotNull('EchoService should not be null', echoService);
+			assertEquals('Rest result should equal ping', 'ping', echoService.response);
 		}
 		
 		private function handleErrorSignal() : void

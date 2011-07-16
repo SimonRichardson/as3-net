@@ -1,22 +1,24 @@
 package org.osflash.net.rest.actions.echo
 {
-	import org.osflash.net.rest.actions.RestActionType;
-	import org.osflash.net.rest.actions.RestAction;
-	import org.osflash.net.rest.actions.IRestActionGet;
+	import org.osflash.net.rest.actions.RestActionGet;
+	import org.osflash.net.rest.parameters.RestUtfParameter;
 
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
-	public class EchoAction extends RestAction implements IRestActionGet
+	public class EchoAction extends RestActionGet
 	{
+		
+		/**
+		 * @private
+		 */
+		private var _parameter : RestUtfParameter;
 
 		public function EchoAction()
 		{
+			_parameter = new RestUtfParameter();
 		}
-
-		/**
-		 * @inheritDoc
-		 */
-		override public function get type() : RestActionType { return RestActionType.GET; }
+		
+		public function get parameter() : RestUtfParameter { return _parameter; }
 	}
 }
