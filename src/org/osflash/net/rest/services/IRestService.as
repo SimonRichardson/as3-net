@@ -12,6 +12,8 @@ package org.osflash.net.rest.services
 		
 		function get action() : IRestAction;
 		
+		function get executing() : Boolean;
+		
 		function get errorSignal() : ISignal;
 		
 		function get completedSignal() : ISignal;

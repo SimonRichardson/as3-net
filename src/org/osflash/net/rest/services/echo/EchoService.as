@@ -35,6 +35,5 @@ package org.osflash.net.rest.services.echo
 		 * @inheritDoc
 		 */
 		override public function get action() : IRestAction { return _action; }
-		
 	}
 }

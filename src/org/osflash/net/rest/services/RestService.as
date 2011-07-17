@@ -20,6 +20,11 @@ package org.osflash.net.rest.services
 		/**
 		 * @private
 		 */
+		private var _executing : Boolean;
+		
+		/**
+		 * @private
+		 */
 		private var _errorSignal : ISignal;
 		
 		/**
@@ -29,6 +34,7 @@ package org.osflash.net.rest.services
 		
 		public function RestService()
 		{
+			_executing = false;
 		}
 
 		/**
@@ -51,6 +57,8 @@ package org.osflash.net.rest.services
 		{
 			throw new Error('Abstract method');
 		}
+		
+		public function get executing() : Boolean { return _executing; }
 		
 		/**
 		 * @inheritDoc

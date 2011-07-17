@@ -7,6 +7,8 @@ package org.osflash.net.rest.actions
 	public interface IRestAction
 	{
 
+		function format() : void;
+
 		function get type() : RestActionType;
 	}
 }

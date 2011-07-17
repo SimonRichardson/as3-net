@@ -13,6 +13,14 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */
+		override public function format() : void
+		{
+			
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
 		override public function get type() : RestActionType { return RestActionType.GET; }
 	}
 }

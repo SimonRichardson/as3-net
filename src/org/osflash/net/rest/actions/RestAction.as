@@ -17,6 +17,11 @@ package org.osflash.net.rest.actions
 			_parameters = new Vector.<RestParameter>();
 		}
 		
+		public function format() : void
+		{
+			throw new Error('Abstract method');
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -24,5 +29,7 @@ package org.osflash.net.rest.actions
 		{
 			throw new Error('Abstract method');
 		}
+		
+		public function get parameters() : Vector.<RestParameter> { return _parameters; }
 	}
 }

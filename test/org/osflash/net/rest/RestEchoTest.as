@@ -1,5 +1,6 @@
 package org.osflash.net.rest
 {
+	import org.osflash.net.rest.output.http.RestHTTPOutput;
 	import asunit.asserts.assertEquals;
 	import asunit.asserts.assertNotNull;
 	import asunit.asserts.assertTrue;
@@ -23,7 +24,7 @@ package org.osflash.net.rest
 		[Before]
 		public function setUp() : void
 		{
-			_rest = new Rest();
+			_rest = new Rest(new RestHTTPOutput());
 		}
 
 		[After]
