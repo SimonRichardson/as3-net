@@ -29,6 +29,9 @@ package org.osflash.net.http.queues
 		 */		
 		public function add(loader : IHTTPLoader) : IHTTPLoader
 		{
+			if(null == loader) throw new ArgumentError('Loader can not be null');
+			if(contains(loader)) throw new ArgumentError('Can not add loader more than once');
+			
 			var index : int = _queues.length;
 			
 			var queue0 : IHTTPQueue = _queues[index - 1];
@@ -48,6 +51,8 @@ package org.osflash.net.http.queues
 		 */		
 		public function remove(loader : IHTTPLoader) : IHTTPLoader
 		{
+			if(null == loader) throw new ArgumentError('Loader can not be null');
+			
 			var index : int = _queues.length;
 			while(--index > -1)
 			{
