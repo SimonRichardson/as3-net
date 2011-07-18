@@ -1,6 +1,5 @@
 package org.osflash.net.http.queues
 {
-	import flash.errors.IllegalOperationError;
 	import org.osflash.net.http.loaders.IHTTPLoader;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -79,7 +78,12 @@ package org.osflash.net.http.queues
 		 */	
 		public function advance() : void
 		{
-			throw new IllegalOperationError('Missing implementation');
+			var index : int = _queues.length;
+			while(--index > -1)
+			{
+				const queue : IHTTPQueue = _queues[index];
+				queue.advance();
+			}
 		}
 		
 		public function get length() : int { return _queues.length;	}
