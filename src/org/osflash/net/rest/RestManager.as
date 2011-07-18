@@ -1,5 +1,6 @@
 package org.osflash.net.rest
 {
+	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.IRestOutput;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.RestServiceExecutioner;
@@ -10,7 +11,7 @@ package org.osflash.net.rest
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
-	public class Rest
+	public class RestManager
 	{
 		
 		/**
@@ -33,7 +34,17 @@ package org.osflash.net.rest
 		 */
 		private var _commitSignal : ISignal;
 		
-		public function Rest(output : IRestOutput = null)
+		/**
+		 * @private
+		 */
+		private var _queue : RestServiceQueue;
+		
+		/**
+		 * @private
+		 */
+		private var _queuing : Boolean;
+		
+		public function RestManager(output : IRestOutput = null)
 		{
 			_executioner = new RestServiceExecutioner(this);
 			
@@ -42,17 +53,38 @@ package org.osflash.net.rest
 		
 		public function begin() : void
 		{
+			if(_queuing) throw new RestError('Unable to begin as already in begin state');
+			
+			_queuing = true;
+			_queue = new RestServiceQueue();
+		}
+		
+		public function release() : void
+		{
+			if(!_queuing) throw new RestError('Unable to commit as not in begin state');
+			if(_queue.active) throw new RestError('Unable to commit, already active state');
+			
+			_executioner.remove(_queue);
+			
+			_queue = null;
+			_queuing = false;
 		}
 		
 		public function commit() : void
 		{
+			if(!_queuing) throw new RestError('Unable to commit as not in begin state');
+			if(_queue.active) throw new RestError('Unable to commit, already active state');
+			
+			_executioner.add(_queue);
+			_queuing = false;
 		}
 		
 		public function add(service : IRestService) : IRestService
 		{
 			if(null == service) throw new ArgumentError('Service can not be null');
 			
-			_executioner.add(new RestServiceQueue(service));
+			if(_queuing) _queue.add(service); 
+			else _executioner.add(new RestServiceQueue(service));
 			
 			return service;
 		}
@@ -60,6 +92,13 @@ package org.osflash.net.rest
 		public function remove(service : IRestService) : IRestService
 		{
 			if(null == service) throw new ArgumentError('Service can not be null');
+			
+			if(_queuing) _queue.remove(service);
+			else 
+			{
+				const queue : RestServiceQueue = _executioner.find(service);
+				if(null != queue) _executioner.remove(queue);
+			}
 			
 			return service;
 		}

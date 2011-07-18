@@ -28,6 +28,7 @@ package org.osflash.net.rest.parameters
 		public function get parameterValue() : * { return _parameterValue; }
 		
 		public function set parameterValue(value : *) : void { _parameterValue = value; }
-
+		
+		public function get parameterAsString() : String { return String(_parameterValue); }
 	}
 }

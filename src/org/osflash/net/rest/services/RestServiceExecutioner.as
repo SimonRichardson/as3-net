@@ -1,7 +1,7 @@
 package org.osflash.net.rest.services
 {
 	import org.osflash.net.net_namespace;
-	import org.osflash.net.rest.Rest;
+	import org.osflash.net.rest.RestManager;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.events.RestErrorEvent;
 	import org.osflash.signals.ISignal;
@@ -28,7 +28,7 @@ package org.osflash.net.rest.services
 		/**
 		 * @private
 		 */
-		private var _manager : Rest;
+		private var _manager : RestManager;
 		
 		/**
 		 * @private
@@ -40,7 +40,7 @@ package org.osflash.net.rest.services
 		 */
 		private var _executedSignal : ISignal;
 				
-		public function RestServiceExecutioner(manager : Rest)
+		public function RestServiceExecutioner(manager : RestManager)
 		{
 			if(null == manager) throw new ArgumentError('Manager can not be null');
 			_manager = manager;
@@ -68,6 +68,20 @@ package org.osflash.net.rest.services
 			const removed : RestServiceQueue = _queues.splice(index, 1)[0];
 			if(removed != queue)
 				throw new RestError('RestServiceQueue mismatch');
+		}
+		
+		public function find(service : IRestService) : RestServiceQueue
+		{
+			// We do this in reverse because statistically you'll want to remove something that
+			// you recently added.
+			var index : int = _queues.length;
+			while(--index > -1)
+			{
+				const queue : RestServiceQueue = _queues[index];
+				if(queue.contains(service)) return queue;
+			}
+			
+			return null;
 		}
 		
 		/**

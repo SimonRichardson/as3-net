@@ -19,12 +19,12 @@ package org.osflash.net.rest
 		[Inject]
 		public var async : IAsync;
 		
-		private var _rest : Rest;
+		private var _rest : RestManager;
 
 		[Before]
 		public function setUp() : void
 		{
-			_rest = new Rest(new RestHTTPOutput());
+			_rest = new RestManager(new RestHTTPOutput());
 		}
 
 		[After]

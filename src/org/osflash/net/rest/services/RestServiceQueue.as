@@ -25,27 +25,32 @@ package org.osflash.net.rest.services
 			if(null != initialStatement) add(initialStatement);
 		}
 		
-		public function add(statement : IRestService) : void
+		public function add(service : IRestService) : void
 		{
 			if(_active) throw new RestError('Unable to add whilst active');
 			
-			if(_services.indexOf(statement) != -1) 
+			if(_services.indexOf(service) != -1) 
 				throw new ArgumentError('IRestService already exists');
 			
-			_services.push(statement);
+			_services.push(service);
 		}
 		
-		public function remove(statement : IRestService) : void
+		public function remove(service : IRestService) : void
 		{
 			if(_active) throw new RestError('Unable to remove whilst active');
 			
-			const index : int = _services.indexOf(statement);
+			const index : int = _services.indexOf(service);
 			if(index == -1)
 				throw new ArgumentError('No such IRestService');
 				
 			const removed : IRestService = _services.splice(index, 1)[0];
-			if(removed != statement)
+			if(removed != service)
 				throw new RestError('IRestService mismatch');
+		}
+		
+		public function contains(service : IRestService) : Boolean
+		{
+			return _services.indexOf(service) >= 0;
 		}
 		
 		public function getAtIndex(index : int) : IRestService
