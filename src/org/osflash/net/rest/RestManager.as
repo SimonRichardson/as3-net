@@ -2,6 +2,7 @@ package org.osflash.net.rest
 {
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.IRestOutput;
+	import org.osflash.net.rest.output.debug.RestDebugOutput;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.RestServiceExecutioner;
 	import org.osflash.net.rest.services.RestServiceQueue;
@@ -49,6 +50,7 @@ package org.osflash.net.rest
 			_executioner = new RestServiceExecutioner(this);
 			
 			if(null != output) _output = output;
+			else _output = new RestDebugOutput();
 		}
 		
 		public function begin() : void

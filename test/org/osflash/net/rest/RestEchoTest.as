@@ -1,12 +1,14 @@
 package org.osflash.net.rest
 {
-	import org.osflash.net.rest.output.http.RestHTTPOutput;
 	import asunit.asserts.assertEquals;
 	import asunit.asserts.assertNotNull;
 	import asunit.asserts.assertTrue;
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
 
+	import org.osflash.net.http.queues.HTTPQueue;
+	import org.osflash.net.http.queues.IHTTPQueue;
+	import org.osflash.net.rest.output.http.RestHTTPOutput;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.echo.EchoService;
 
@@ -24,7 +26,10 @@ package org.osflash.net.rest
 		[Before]
 		public function setUp() : void
 		{
-			_rest = new RestManager(new RestHTTPOutput());
+			const queue : IHTTPQueue = new HTTPQueue();
+			
+			_rest = new RestManager();
+			_rest.output = new RestHTTPOutput(queue);
 		}
 
 		[After]
