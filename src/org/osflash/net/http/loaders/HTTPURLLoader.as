@@ -1,5 +1,6 @@
 package org.osflash.net.http.loaders
 {
+	import org.osflash.net.http.queues.IHTTPQueue;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -7,6 +8,14 @@ package org.osflash.net.http.loaders
 	{
 
 		public function HTTPURLLoader()
+		{
+		}
+
+		public function start(queue : IHTTPQueue) : void
+		{
+		}
+
+		public function stop() : void
 		{
 		}
 
