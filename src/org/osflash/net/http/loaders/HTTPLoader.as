@@ -71,8 +71,12 @@ package org.osflash.net.http.loaders
 			stopSignal.dispatch(this);
 		}
 		
+		public function get loader() : Loader { return _loader; }
+		
 		public function get request() : URLRequest { return _request; }
 		
 		public function get context() : LoaderContext { return _context; }
+		
+		override public function get content() : * { return _loader.content; }
 	}
 }

@@ -27,6 +27,11 @@ package org.osflash.net.http.loaders
 		/**
 		 * @private
 		 */
+		private var _listening : Boolean;
+		
+		/**
+		 * @private
+		 */
 		private var _startSignal : ISignal;
 		
 		/**
@@ -88,6 +93,8 @@ package org.osflash.net.http.loaders
 		{
 			if(null == dispatcher) throw new ArgumentError('EventDispatcher can not be null');
 			
+			_listening = false;
+			
 			_nativeCompleteSignal = new NativeSignal(dispatcher, Event.COMPLETE);
 			_nativeHTTPStatusSignal = new NativeSignal(	dispatcher, 
 														HTTPStatusEvent.HTTP_STATUS, 
@@ -131,10 +138,14 @@ package org.osflash.net.http.loaders
 			_nativeProgressSignal.add(handleProgressSignal);
 			_nativeIOErrorSignal.add(handleIOErrorSignal);
 			_nativeSecurityErrorSignal.add(handleSecurityErrorSignal);
+			
+			_listening = true;
 		}
 		
 		protected function unregister() : void
 		{
+			_listening = false;
+			
 			_nativeCompleteSignal.remove(handleCompleteSignal);
 			_nativeHTTPStatusSignal.remove(handleHTTPStatusSignal);
 			_nativeProgressSignal.remove(handleProgressSignal);
@@ -144,27 +155,32 @@ package org.osflash.net.http.loaders
 		
 		protected function handleCompleteSignal(event : Event) : void
 		{
-			completeSignal.dispatch(event);
+			if(_listening) completeSignal.dispatch(event);
 		}
 		
 		protected function handleHTTPStatusSignal(event : HTTPStatusEvent) : void
 		{
-			httpStatusSignal.dispatch(event);
+			if(_listening) httpStatusSignal.dispatch(event);
 		}
 		
 		protected function handleProgressSignal(event : ProgressEvent) : void
 		{
-			progressSignal.dispatch(event);
+			if(_listening) progressSignal.dispatch(event);
 		}
 		
 		protected function handleIOErrorSignal(event : IOErrorEvent) : void
 		{
-			ioErrorSignal.dispatch(event);
+			if(_listening) ioErrorSignal.dispatch(event);
 		}
 		
 		protected function handleSecurityErrorSignal(event : SecurityErrorEvent) : void
 		{
-			securityErrorSignal.dispatch(event);
+			if(_listening) securityErrorSignal.dispatch(event);
+		}
+		
+		public function get content() : * 
+		{
+			throw new Error('Abstract method');
 		}
 		
 		public function get startSignal() : ISignal
@@ -211,7 +227,8 @@ package org.osflash.net.http.loaders
 																				SecurityErrorEvent
 																				);
 			return _securityErrorSignal;
-		}		
+		}
+		
 		net_namespace function get queue() : IHTTPQueue { return _queue; }
 	}
 }

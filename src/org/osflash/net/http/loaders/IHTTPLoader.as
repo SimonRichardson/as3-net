@@ -10,5 +10,7 @@ package org.osflash.net.http.loaders
 		function start(queue : IHTTPQueue) : void;
 
 		function stop() : void;
+		
+		function get content() : *;
 	}
 }
