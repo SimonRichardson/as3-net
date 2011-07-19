@@ -10,14 +10,19 @@ package org.osflash.net.http.loaders
 		public function HTTPURLLoader()
 		{
 		}
-
+		
+		/**
+		 * @inheritDoc
+		 */
 		public function start(queue : IHTTPQueue) : void
 		{
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function stop() : void
 		{
 		}
-
 	}
 }
