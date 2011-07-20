@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.parameters.RestParameter;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -28,7 +29,15 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */
-		public function onActionError(error : int) : void
+		public function onActionStatus(status : int) : void
+		{
+			throw new Error('Abstract method');
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function onActionError(error : RestError) : void
 		{
 			throw new Error('Abstract method');
 		}

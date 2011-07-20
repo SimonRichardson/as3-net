@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.rest.errors.RestError;
 
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -9,7 +10,9 @@ package org.osflash.net.rest.actions
 		
 		function onActionData(data : *) : void;
 		
-		function onActionError(error : int) : void;
+		function onActionStatus(status : int) : void;
+
+		function onActionError(error : RestError) : void;
 
 		function get type() : RestActionType;
 	}
