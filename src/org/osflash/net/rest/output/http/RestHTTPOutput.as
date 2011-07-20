@@ -103,7 +103,7 @@ package org.osflash.net.rest.output.http
 			
 			const action : IRestAction = service.action;
 			
-			const uri : String = buildURI(_host.baseURI, service.name);
+			const uri : String = buildURI(_host.baseURI, service.name, action.parameters);
 			
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest(uri);

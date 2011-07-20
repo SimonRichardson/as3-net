@@ -6,7 +6,6 @@ package org.osflash.net.rest
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
 
-	import org.osflash.logger.logs.error;
 	import org.osflash.net.http.queues.HTTPQueue;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.rest.events.RestErrorEvent;
@@ -30,7 +29,7 @@ package org.osflash.net.rest
 		{
 			const queue : IHTTPQueue = new HTTPQueue();
 			
-			const host : RestHost = new RestHost('http://www.rest.com:80/?platform=yv');
+			const host : RestHost = new RestHost('http://rest.com:80/?platform=yv');
 			
 			_rest = new RestManager(host);
 			_rest.output = new RestHTTPOutput(queue);
@@ -46,7 +45,7 @@ package org.osflash.net.rest
 		public function create_service_and_execute() : void
 		{
 			const service : IRestService = new EchoService('ping');
-			service.completedSignal.add(async.add(handleCompletedSignal, 1000));
+			service.completedSignal.add(async.add(handleCompletedSignal, 2000));
 			service.errorSignal.add(handleErrorSignal);
 			
 			_rest.add(service);
@@ -63,9 +62,10 @@ package org.osflash.net.rest
 		
 		private function handleErrorSignal(service : IRestService, event : RestErrorEvent) : void
 		{
-			error(service, event);
-			
 			fail("Failed if called");
+			
+			service;
+			event;
 		}
 	}
 }

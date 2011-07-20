@@ -1,5 +1,6 @@
 package org.osflash.net.rest.services.echo
 {
+	import org.osflash.net.net_namespace;
 	import org.osflash.net.rest.actions.IRestAction;
 	import org.osflash.net.rest.actions.echo.EchoAction;
 	import org.osflash.net.rest.services.IRestService;
@@ -9,6 +10,13 @@ package org.osflash.net.rest.services.echo
 	 */
 	public class EchoService extends RestService implements IRestService
 	{
+
+		use namespace net_namespace;
+		
+		/**
+		 * @private
+		 */
+		private var _data : String;
 		
 		/**
 		 * @private
@@ -23,7 +31,12 @@ package org.osflash.net.rest.services.echo
 		
 		public function get response() : String
 		{
-			return '';
+			return _data;
+		}
+
+		net_namespace function set data(value : String) : void
+		{
+			_data = value;
 		}
 		
 		/**

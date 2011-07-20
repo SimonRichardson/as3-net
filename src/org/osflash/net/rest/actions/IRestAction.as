@@ -1,5 +1,7 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.rest.services.IRestService;
+	import org.osflash.net.rest.parameters.RestParameter;
 	import org.osflash.net.rest.errors.RestError;
 
 	/**
@@ -15,5 +17,9 @@ package org.osflash.net.rest.actions
 		function onActionError(error : RestError) : void;
 
 		function get type() : RestActionType;
+		
+		function get service() : IRestService;
+		
+		function get parameters() : Vector.<RestParameter>;
 	}
 }

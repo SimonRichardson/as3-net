@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.parameters.RestParameter;
 	/**
@@ -11,10 +12,19 @@ package org.osflash.net.rest.actions
 		/**
 		 * @private
 		 */
+		private var _service : IRestService;
+		
+		/**
+		 * @private
+		 */
 		private var _parameters : Vector.<RestParameter>;
 
-		public function RestAction()
+		public function RestAction(service : IRestService)
 		{
+			if(null == service) throw new ArgumentError('Service can not be null');
+			
+			_service = service;
+			
 			_parameters = new Vector.<RestParameter>();
 		}
 		
@@ -50,6 +60,14 @@ package org.osflash.net.rest.actions
 			throw new Error('Abstract method');
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		public function get service() : IRestService { return _service; }
+		
+		/**
+		 * @inheritDoc
+		 */
 		public function get parameters() : Vector.<RestParameter> { return _parameters; }
 	}
 }

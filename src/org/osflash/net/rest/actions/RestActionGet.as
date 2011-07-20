@@ -8,17 +8,10 @@ package org.osflash.net.rest.actions
 	 */
 	public class RestActionGet extends RestAction implements IRestActionGet
 	{
-		
-		/**
-		 * @private
-		 */
-		private var _service : IRestService;
 
 		public function RestActionGet(service : IRestService)
 		{
-			if(null == service) throw new ArgumentError('Service can not be null');
-			
-			_service = service;
+			super(service);
 		}
 		
 		/**
@@ -26,9 +19,7 @@ package org.osflash.net.rest.actions
 		 */	
 		override public function onActionData(data : *) : void
 		{
-			// TODO : set the data on the service?
-			
-			_service.completedSignal.dispatch(_service);
+			service.completedSignal.dispatch(service);
 		}
 		
 		/**
@@ -44,7 +35,7 @@ package org.osflash.net.rest.actions
 		 */
 		override public function onActionError(error : RestError) : void
 		{
-			_service.errorSignal.dispatch(_service, new RestErrorEvent(error.message, error));
+			service.errorSignal.dispatch(service, new RestErrorEvent(error.message, error));
 		}
 		
 		/**
