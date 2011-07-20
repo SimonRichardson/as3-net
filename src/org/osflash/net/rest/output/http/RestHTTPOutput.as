@@ -1,5 +1,6 @@
 package org.osflash.net.rest.output.http
 {
+	import flash.net.URLRequestHeader;
 	import org.osflash.net.rest.output.utils.buildURI;
 	import flash.net.URLRequestMethod;
 	import org.osflash.net.rest.actions.IRestAction;
@@ -107,7 +108,19 @@ package org.osflash.net.rest.output.http
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest(uri);
 			
-			urlRequest.requestHeaders = [];
+			const requestHeaders : Array = [];
+			
+			switch(action.type)
+			{
+				case RestActionType.PUT:
+					requestHeaders.push(new URLRequestHeader('X-HTTP-Method-Override', 'PUT'));
+					break;
+				case RestActionType.DELETE:
+					requestHeaders.push(new URLRequestHeader('X-HTTP-Method-Override', 'DELETE'));
+					break;
+			}
+			
+			urlRequest.requestHeaders = requestHeaders;
 			urlRequest.method = action.type == RestActionType.GET ? 
 																URLRequestMethod.GET : 
 																URLRequestMethod.POST; 
