@@ -1,5 +1,8 @@
 package org.osflash.net.rest.output.http
 {
+	import org.osflash.net.rest.output.utils.buildURI;
+	import flash.net.URLRequestMethod;
+	import org.osflash.net.rest.actions.IRestAction;
 	import org.osflash.net.http.HTTPStatusCode;
 	import org.osflash.net.http.loaders.HTTPURLLoader;
 	import org.osflash.net.http.loaders.IHTTPLoader;
@@ -94,10 +97,20 @@ package org.osflash.net.rest.output.http
 		public function execute(service : IRestService) : void
 		{
 			if(null == service) throw new ArgumentError('Service can not be null');
+			if(null == service.action) throw new ArgumentError('Service Action can not be null');
 			if(null == host) throw new RestError('RestHost can not be null');
 			
+			const action : IRestAction = service.action;
+			
+			const uri : String = buildURI(_host.baseURI, service.name);
+			
 			const urlLoader : URLLoader = new URLLoader();
-			const urlRequest : URLRequest = new URLRequest();
+			const urlRequest : URLRequest = new URLRequest(uri);
+			
+			urlRequest.requestHeaders = [];
+			urlRequest.method = action.type == RestActionType.GET ? 
+																URLRequestMethod.GET : 
+																URLRequestMethod.POST; 
 			
 			const loader : IHTTPLoader = new HTTPURLLoader(urlLoader, urlRequest);
 			loader.registerObservable(_observer);

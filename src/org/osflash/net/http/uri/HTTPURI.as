@@ -120,7 +120,7 @@ package org.osflash.net.http.uri
 				}
 			}
 		}
-
+		
 		/**
 		 * Get the original URI
 		 * 
@@ -175,9 +175,6 @@ package org.osflash.net.http.uri
 		 * 
 		 * @return Vector.<HTTPUniformResourceIdentifierParameters>
 		 */
-		public function get parameters() : Vector.<HTTPURIParameters>
-		{
-			return _parameters;
-		}
+		public function get parameters() : Vector.<HTTPURIParameters> { return _parameters; }
 	}
 }

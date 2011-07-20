@@ -20,6 +20,17 @@ package org.osflash.net.rest
 			_uri = new HTTPURI(uri);
 		}
 		
-		public function get uri() : String { return _uri.uri; }
+		/** 
+		 * Get the the base uri
+		 */
+		public function get baseURI() : String 
+		{ 
+			return _uri.protocol + 
+					'://' + 
+					_uri.host + 
+					(_uri.port != 80 ? '' : ':' + _uri.port) + 
+					'/' + 
+					_uri.path; 
+		}
 	}
 }

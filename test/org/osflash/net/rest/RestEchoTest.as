@@ -37,6 +37,7 @@ package org.osflash.net.rest
 		[After]
 		public function tearDown() : void
 		{
+			_rest = null;
 		}
 
 		[Test]
