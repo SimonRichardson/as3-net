@@ -1,4 +1,4 @@
-package org.osflash.net.http.loaders
+package org.osflash.net.http.loaders.signals
 {
 	import org.osflash.signals.ISignal;
 	/**
@@ -6,10 +6,6 @@ package org.osflash.net.http.loaders
 	 */
 	public interface IHTTPLoaderSignals
 	{
-		
-		function registerObservable(observer : IHTTPLoaderObserver) : void;
-		
-		function unregisterObservable(observer : IHTTPLoaderObserver) : void;
 		
 		function get startSignal() : ISignal;
 		

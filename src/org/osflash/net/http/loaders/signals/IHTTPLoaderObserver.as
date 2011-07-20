@@ -1,10 +1,11 @@
-package org.osflash.net.http.loaders
+package org.osflash.net.http.loaders.signals
 {
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
+	import org.osflash.net.http.loaders.IHTTPLoader;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */

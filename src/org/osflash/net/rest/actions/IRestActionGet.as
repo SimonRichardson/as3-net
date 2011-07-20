@@ -5,5 +5,6 @@ package org.osflash.net.rest.actions
 	 */
 	public interface IRestActionGet extends IRestAction
 	{
+		
 	}
 }
