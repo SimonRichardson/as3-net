@@ -28,7 +28,7 @@ package org.osflash.net.rest
 		{
 			const queue : IHTTPQueue = new HTTPQueue();
 			
-			_rest = new RestManager();
+			_rest = new RestManager(new RestHost('http://www.rest.com:80'));
 			_rest.output = new RestHTTPOutput(queue);
 		}
 

@@ -2,7 +2,6 @@ package org.osflash.net.rest
 {
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.IRestOutput;
-	import org.osflash.net.rest.output.debug.RestDebugOutput;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.RestServiceExecutioner;
 	import org.osflash.net.rest.services.RestServiceQueue;
@@ -14,6 +13,11 @@ package org.osflash.net.rest
 	 */
 	public class RestManager
 	{
+		
+		/**
+		 * @private
+		 */
+		private var _host : RestHost;
 		
 		/**
 		 * @private
@@ -45,12 +49,14 @@ package org.osflash.net.rest
 		 */
 		private var _queuing : Boolean;
 		
-		public function RestManager(output : IRestOutput = null)
+		public function RestManager(host : RestHost, output : IRestOutput = null)
 		{
-			_executioner = new RestServiceExecutioner(this);
+			if(null == host) throw new ArgumentError('Host can not be null');
 			
-			if(null != output) _output = output;
-			else _output = new RestDebugOutput();
+			_host = host;
+			_output = output;
+			
+			_executioner = new RestServiceExecutioner(this);
 		}
 		
 		public function begin() : void
@@ -116,6 +122,7 @@ package org.osflash.net.rest
 			}
 			
 			_output = value;
+			_output.host = _host;
 		}
 		
 		public function get beginSignal() : ISignal

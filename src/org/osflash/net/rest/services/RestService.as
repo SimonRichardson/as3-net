@@ -1,6 +1,7 @@
 package org.osflash.net.rest.services
 {
 	import org.osflash.net.rest.actions.IRestAction;
+	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.utils.getClassNameFromQname;
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
@@ -65,7 +66,7 @@ package org.osflash.net.rest.services
 		 */
 		public function get errorSignal() : ISignal
 		{
-			if(null == _errorSignal) _errorSignal = new Signal();
+			if(null == _errorSignal) _errorSignal = new Signal(RestError);
 			return _errorSignal;
 		}
 		

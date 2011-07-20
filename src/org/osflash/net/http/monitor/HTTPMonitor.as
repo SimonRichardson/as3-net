@@ -8,6 +8,7 @@ package org.osflash.net.http.monitor
 
 		public function HTTPMonitor()
 		{
+			
 		}
 		
 	}

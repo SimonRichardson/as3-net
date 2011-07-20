@@ -5,6 +5,7 @@ package org.osflash.net.rest.output.http
 	import org.osflash.net.http.loaders.IHTTPLoader;
 	import org.osflash.net.http.loaders.signals.HTTPLoaderObserver;
 	import org.osflash.net.http.queues.IHTTPQueue;
+	import org.osflash.net.rest.RestHost;
 	import org.osflash.net.rest.actions.RestActionType;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.IRestOutput;
@@ -23,6 +24,11 @@ package org.osflash.net.rest.output.http
 	 */
 	public class RestHTTPOutput implements IRestOutput
 	{
+		
+		/**
+		 * @private
+		 */
+		private var _host : RestHost;
 
 		/**
 		 * @private
@@ -88,6 +94,7 @@ package org.osflash.net.rest.output.http
 		public function execute(service : IRestService) : void
 		{
 			if(null == service) throw new ArgumentError('Service can not be null');
+			if(null == host) throw new RestError('RestHost can not be null');
 			
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest();
@@ -191,5 +198,11 @@ package org.osflash.net.rest.output.http
 			}
 			else throw new RestError('Unable to locate the loader');
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get host() : RestHost { return _host; }
+		public function set host(value : RestHost) : void { if(_host != value) _host = value; }
 	}
 }

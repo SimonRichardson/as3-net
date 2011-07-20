@@ -17,7 +17,7 @@ package org.osflash.net.rest.services.echo
 		
 		public function EchoService(value : String)
 		{
-			_action = new EchoAction();
+			_action = new EchoAction(this);
 			_action.parameter.value = value;
 		}
 		

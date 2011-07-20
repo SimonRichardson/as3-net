@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions.echo
 {
+	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.actions.RestActionGet;
 	import org.osflash.net.rest.parameters.RestUtfParameter;
 
@@ -14,8 +15,10 @@ package org.osflash.net.rest.actions.echo
 		 */
 		private var _parameter : RestUtfParameter;
 
-		public function EchoAction()
+		public function EchoAction(service : IRestService)
 		{
+			super(service);
+			
 			_parameter = new RestUtfParameter();
 		}
 		
