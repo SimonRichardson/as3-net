@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.parameters.RestParameter;
@@ -17,6 +18,11 @@ package org.osflash.net.rest.actions
 		/**
 		 * @private
 		 */
+		private var _mimeType : HTTPMIMEType;
+		
+		/**
+		 * @private
+		 */
 		private var _parameters : Vector.<RestParameter>;
 
 		public function RestAction(service : IRestService)
@@ -24,6 +30,7 @@ package org.osflash.net.rest.actions
 			if(null == service) throw new ArgumentError('Service can not be null');
 			
 			_service = service;
+			_mimeType = HTTPMIMEType.TEXT_XML;
 			
 			_parameters = new Vector.<RestParameter>();
 		}
@@ -59,6 +66,12 @@ package org.osflash.net.rest.actions
 		{
 			throw new Error('Abstract method');
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get mimeType() : HTTPMIMEType { return _mimeType; }
+		public function set mimeType(value : HTTPMIMEType) : void { _mimeType = value; }
 		
 		/**
 		 * @inheritDoc

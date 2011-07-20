@@ -1,5 +1,7 @@
 package org.osflash.net.rest.actions.echo
 {
+	import org.osflash.net.rest.errors.RestError;
+	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.net_namespace;
 	import org.osflash.net.rest.actions.RestActionGet;
 	import org.osflash.net.rest.parameters.RestUtfParameter;
@@ -39,8 +41,16 @@ package org.osflash.net.rest.actions.echo
 		override public function onActionData(data : *) : void
 		{
 			// TODO : do different mime types!
-			const xml : XML = new XML(data);
-			_service.data = xml.child('response');
+			switch(mimeType)
+			{
+				case HTTPMIMEType.TEXT_XML:
+					const xml : XML = new XML(data);
+					_service.data = xml.child('response');
+					break;
+				default:
+					throw new RestError('Unsupported MIME Type');
+					break;
+			}
 			
 			super.onActionData(data);
 		}

@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions
 {
+	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.parameters.RestParameter;
 	import org.osflash.net.rest.errors.RestError;
@@ -17,6 +18,9 @@ package org.osflash.net.rest.actions
 		function onActionError(error : RestError) : void;
 
 		function get type() : RestActionType;
+		
+		function get mimeType() : HTTPMIMEType;
+		function set mimeType(value : HTTPMIMEType) : void;
 		
 		function get service() : IRestService;
 		

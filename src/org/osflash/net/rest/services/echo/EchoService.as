@@ -1,5 +1,6 @@
 package org.osflash.net.rest.services.echo
 {
+	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.net_namespace;
 	import org.osflash.net.rest.actions.IRestAction;
 	import org.osflash.net.rest.actions.echo.EchoAction;
@@ -23,9 +24,10 @@ package org.osflash.net.rest.services.echo
 		 */
 		private var _action : EchoAction;
 		
-		public function EchoService(value : String)
+		public function EchoService(value : String, mimeType : HTTPMIMEType = null)
 		{
 			_action = new EchoAction(this);
+			_action.mimeType = mimeType;
 			_action.parameter.value = value;
 		}
 		
