@@ -10,6 +10,5 @@ package org.osflash.net.rest.errors
 		{
 			super(message);
 		}
-
 	}
 }

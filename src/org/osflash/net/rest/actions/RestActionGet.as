@@ -33,9 +33,17 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */
-		override public function onActionError(error : RestError) : void
+		override public function onActionStatus(status : int) : void
 		{
-			_service.errorSignal.dispatch(error);
+			
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function onActionError(restError : RestError) : void
+		{
+			_service.errorSignal.dispatch(restError);
 		}
 		
 		/**

@@ -21,7 +21,7 @@ package org.osflash.net.rest.services.echo
 			_action.parameter.value = value;
 		}
 		
-		public function response() : String
+		public function get response() : String
 		{
 			return '';
 		}

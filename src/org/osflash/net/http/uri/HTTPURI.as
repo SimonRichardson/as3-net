@@ -147,7 +147,7 @@ package org.osflash.net.http.uri
 		 * 
 		 * @return String
 		 */
-		public function get port() : Number { return _port; }
+		public function get port() : int { return _port; }
 
 		/**
 		 * Get the Path from the URI

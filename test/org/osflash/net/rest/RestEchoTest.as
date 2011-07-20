@@ -5,9 +5,10 @@ package org.osflash.net.rest
 	import asunit.asserts.assertTrue;
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
-
+	import org.osflash.logger.logs.error;
 	import org.osflash.net.http.queues.HTTPQueue;
 	import org.osflash.net.http.queues.IHTTPQueue;
+	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.http.RestHTTPOutput;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.echo.EchoService;
@@ -59,8 +60,10 @@ package org.osflash.net.rest
 			assertEquals('Rest result should equal ping', 'ping', echoService.response);
 		}
 		
-		private function handleErrorSignal() : void
+		private function handleErrorSignal(restError : RestError) : void
 		{
+			error(restError);
+			
 			fail("Failed if called");
 		}
 	}

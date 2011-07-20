@@ -28,9 +28,8 @@ package org.osflash.net.rest
 			return _uri.protocol + 
 					'://' + 
 					_uri.host + 
-					(_uri.port != 80 ? '' : ':' + _uri.port) + 
-					'/' + 
-					_uri.path; 
+					(_uri.port == 80 ? '' : ':' + _uri.port) + 
+					(_uri.path == '/' ? '/' : _uri.path);
 		}
 	}
 }

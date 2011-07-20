@@ -188,27 +188,27 @@ package org.osflash.net.http.loaders
 		
 		protected function handleCompleteSignal(event : Event) : void
 		{
-			if(_listening) completeSignal.dispatch(event);
+			if(_listening) completeSignal.dispatch(this, event);
 		}
 		
 		protected function handleHTTPStatusSignal(event : HTTPStatusEvent) : void
 		{
-			if(_listening) httpStatusSignal.dispatch(event);
+			if(_listening) httpStatusSignal.dispatch(this, event);
 		}
 		
 		protected function handleProgressSignal(event : ProgressEvent) : void
 		{
-			if(_listening) progressSignal.dispatch(event);
+			if(_listening) progressSignal.dispatch(this, event);
 		}
 		
 		protected function handleIOErrorSignal(event : IOErrorEvent) : void
 		{
-			if(_listening) ioErrorSignal.dispatch(event);
+			if(_listening) ioErrorSignal.dispatch(this, event);
 		}
 		
 		protected function handleSecurityErrorSignal(event : SecurityErrorEvent) : void
 		{
-			if(_listening) securityErrorSignal.dispatch(event);
+			if(_listening) securityErrorSignal.dispatch(this, event);
 		}
 		
 		public function get content() : * 
