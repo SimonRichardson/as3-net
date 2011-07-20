@@ -1,6 +1,7 @@
 package org.osflash.net.rest.actions
 {
 	import org.osflash.net.rest.errors.RestError;
+	import org.osflash.net.rest.events.RestErrorEvent;
 	import org.osflash.net.rest.services.IRestService;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -41,9 +42,9 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */
-		override public function onActionError(restError : RestError) : void
+		override public function onActionError(error : RestError) : void
 		{
-			_service.errorSignal.dispatch(restError);
+			_service.errorSignal.dispatch(_service, new RestErrorEvent(error.message, error));
 		}
 		
 		/**
