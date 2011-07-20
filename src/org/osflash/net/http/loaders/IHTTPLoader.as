@@ -4,7 +4,7 @@ package org.osflash.net.http.loaders
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
-	public interface IHTTPLoader
+	public interface IHTTPLoader extends IHTTPLoaderSignals
 	{
 
 		function start(queue : IHTTPQueue) : void;

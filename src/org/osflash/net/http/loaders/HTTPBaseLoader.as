@@ -131,6 +131,38 @@ package org.osflash.net.http.loaders
 		{
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		public function registerObservable(observer : IHTTPLoaderObserver) : void
+		{
+			if(null == observer) throw new ArgumentError('Observer can not be null');
+			
+			startSignal.add(observer.handleStartSignal);
+			stopSignal.add(observer.handleStopSignal);
+			completeSignal.add(observer.handleCompleteSignal);
+			httpStatusSignal.add(observer.handleHTTPStatusSignal);
+			progressSignal.add(observer.handleProgressSignal);
+			ioErrorSignal.add(observer.handleIOErrorSignal);
+			securityErrorSignal.add(observer.handleSecurityErrorSignal);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function unregisterObservable(observer : IHTTPLoaderObserver) : void
+		{
+			if(null == observer) throw new ArgumentError('Observer can not be null');
+			
+			startSignal.remove(observer.handleStartSignal);
+			stopSignal.remove(observer.handleStopSignal);
+			completeSignal.remove(observer.handleCompleteSignal);
+			httpStatusSignal.remove(observer.handleHTTPStatusSignal);
+			progressSignal.remove(observer.handleProgressSignal);
+			ioErrorSignal.remove(observer.handleIOErrorSignal);
+			securityErrorSignal.remove(observer.handleSecurityErrorSignal);
+		}
+		
 		protected function register() : void
 		{
 			_nativeCompleteSignal.add(handleCompleteSignal);
