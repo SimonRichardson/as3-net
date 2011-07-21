@@ -1,17 +1,18 @@
 package org.osflash.net.http.loaders
 {
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.HTTPStatusEvent;
-	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
-	import flash.events.SecurityErrorEvent;
 	import org.osflash.net.http.loaders.signals.IHTTPLoaderObserver;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.net_namespace;
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
 	import org.osflash.signals.natives.NativeSignal;
+
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.HTTPStatusEvent;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 
 
 	/**

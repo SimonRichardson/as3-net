@@ -28,8 +28,8 @@ package org.osflash.net.http
 		}
 		
 		public static function getMimeTypeByName(value : String) : HTTPMIMEType
-		{
-			switch(value.toLowerCase())
+		{			
+			switch(String(value).toLowerCase())
 			{
 				case 'htm':
 				case 'html':

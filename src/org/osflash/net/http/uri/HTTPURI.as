@@ -9,7 +9,9 @@ package org.osflash.net.http.uri
 		 * Regular expression to split the host pattern
 		 */
 		private static const PATTERN : RegExp = /(?P<protocol>[a-zA-Z]+):\/\/(?P<host>[^:\/]*)(:(?P<port>\d+))?((?P<path>[^?]*))?((?P<parameters>.*))?/x;
-
+		
+		private static const DEFAULT_PROTOCOL : String = 'http';
+		
 		/**
 		 * @private
 		 */
@@ -68,6 +70,13 @@ package org.osflash.net.http.uri
 
 			if (null == results)
 			{
+				// Make sure we have a default protocol.
+				if(uri.indexOf(DEFAULT_PROTOCOL + '://') == -1) 
+				{
+					_uri = DEFAULT_PROTOCOL + '://' + uri;
+					parse();
+				}
+				
 				return;
 			}
 
@@ -132,7 +141,8 @@ package org.osflash.net.http.uri
 			
 			if(port != 80) buffer.push(':', port);
 			
-			if(paths.length > 0) buffer.splice.apply(null, [buffer.length, 0, paths.join('/')]);
+			if(null != paths && paths.length > 0) 
+				buffer.splice.apply(null, [buffer.length, 0, paths.join('/')]);
 			
 			return buffer.join('');
 		}

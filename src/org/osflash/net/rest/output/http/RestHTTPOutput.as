@@ -178,6 +178,8 @@ package org.osflash.net.rest.output.http
 					)
 				{	
 					service.action.onActionStatus(status);
+					
+					remove(loader);
 				}
 			}
 			else throw new RestError('Unable to locate the loader');

@@ -1,6 +1,5 @@
 package org.osflash.net.rest
 {
-	import asunit.asserts.assertEquals;
 	import asunit.asserts.assertNotNull;
 	import asunit.asserts.assertTrue;
 	import asunit.asserts.fail;
@@ -11,14 +10,13 @@ package org.osflash.net.rest
 	import org.osflash.net.rest.events.RestErrorEvent;
 	import org.osflash.net.rest.output.http.RestHTTPOutput;
 	import org.osflash.net.rest.services.IRestService;
-	import org.osflash.net.rest.services.echo.EchoService;
-
+	import org.osflash.net.rest.support.services.GetAllUsersService;
 	/**
-	 * @author Simon Richardson - me@simonrichardson.info
+	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class RestEchoTest
+	public class RestGetAllUsersTest
 	{
-
+		
 		[Inject]
 		public var async : IAsync;
 		
@@ -44,7 +42,7 @@ package org.osflash.net.rest
 		[Test]
 		public function create_service_and_execute() : void
 		{
-			const service : IRestService = new EchoService('ping');
+			const service : IRestService = new GetAllUsersService();
 			service.completedSignal.add(async.add(handleCompletedSignal, 2000));
 			service.errorSignal.add(handleErrorSignal);
 			
@@ -53,11 +51,12 @@ package org.osflash.net.rest
 		
 		private function handleCompletedSignal(service : IRestService) : void
 		{
-			const echoService : EchoService = service as EchoService;
+			const getAllUsersService : GetAllUsersService = service as GetAllUsersService;
 			
-			assertTrue('Service should be EchoService', service is EchoService);
-			assertNotNull('EchoService should not be null', echoService);
-			assertEquals('Rest result should equal ping', 'ping', echoService.response);
+			assertTrue('Service should be GetAllUsersService', service is GetAllUsersService);
+			assertNotNull('GetAllUsersService should not be null', getAllUsersService);
+			assertNotNull('GetAllUsersService users should not be null', getAllUsersService.users);
+			assertTrue('Users should be greater than 0', getAllUsersService.users.length > 0);
 		}
 		
 		private function handleErrorSignal(service : IRestService, event : RestErrorEvent) : void
