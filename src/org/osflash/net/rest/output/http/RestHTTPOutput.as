@@ -1,5 +1,6 @@
 package org.osflash.net.rest.output.http
 {
+	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
 	import org.osflash.net.http.loaders.HTTPURLLoader;
@@ -111,6 +112,8 @@ package org.osflash.net.rest.output.http
 			}
 			
 			const uri : String = buildURI(_host.uri, service.name, action.parameters);
+			
+			debug(uri);
 			
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest(uri);

@@ -11,13 +11,11 @@ package org.osflash.net.rest.output.utils
 								) : String
 	{
 		
-		const euri : String = encodeURI(uri.getBaseURI());
-		const emethod : String = encodeURI(method);
-		
+		const base : String = uri.getBaseURI();
 		const buffer : Vector.<String> = new Vector.<String>();
 		
-		buffer.push(euri.substr(-1) == '/' ? euri.substr(0, -1) : euri);
-		buffer.push(emethod);
+		buffer.push(base.substr(-1) == '/' ? base.substr(0, -1) : base);
+		buffer.push(encodeURIComponent(method));
 				
 		const total : int = parameters.length;
 		for(var i : int = 0; i < total; i++)
@@ -26,6 +24,11 @@ package org.osflash.net.rest.output.utils
 			buffer.push(parameter.parameterAsString);
 		}
 		
-		return buffer.join('/') + '?' + uri.getParametersAsString();
+		const extension : String = uri.extension.length > 0 ? '.' + uri.extension : '';
+		const uriParameters : String = uri.parameters.length > 0 ? 
+													'?' + uri.getParametersAsString() : 
+													'';
+		
+		return buffer.join('/') + extension + uriParameters;
 	}
 }

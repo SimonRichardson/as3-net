@@ -29,7 +29,7 @@ package org.osflash.net.rest
 		{
 			const queue : IHTTPQueue = new HTTPQueue();
 			
-			const host : RestHost = new RestHost('http://rest.com:80/.xml?platform=yv');
+			const host : RestHost = new RestHost('http://rest.com:80/.html?platform=yv');
 			
 			_rest = new RestManager(host);
 			_rest.output = new RestHTTPOutput(queue);

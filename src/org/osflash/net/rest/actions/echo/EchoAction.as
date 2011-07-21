@@ -1,13 +1,14 @@
 package org.osflash.net.rest.actions.echo
 {
-	import flash.system.System;
-	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.net_namespace;
 	import org.osflash.net.rest.actions.RestActionGet;
+	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.parameters.RestUtfParameter;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.echo.EchoService;
+
+	import flash.system.System;
 
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -34,8 +35,6 @@ package org.osflash.net.rest.actions.echo
 			_service = EchoService(service);
 			
 			parameters.push(_parameter = new RestUtfParameter());
-			
-			
 		}
 		
 		/**
@@ -46,10 +45,37 @@ package org.osflash.net.rest.actions.echo
 			switch(mimeType)
 			{
 				case HTTPMIMEType.TEXT_XML:
-					const xml : XML = new XML(data);
-					_service.data = xml.child('response');
-					
-					if('disposeXML' in System) System['disposeXML'](xml);
+					try
+					{
+						const xml : XML = new XML(data);
+						_service.data = xml.child('response');
+					}
+					catch (error : Error)
+					{
+						throw new RestError('Invalid response for MIME Type (xml)');
+					}
+					finally
+					{
+						if('disposeXML' in System) System['disposeXML'](xml);
+					}
+					break;
+				case HTTPMIMEType.TEXT_HTML:
+					try
+					{
+						const html : XML = new XML(data);
+						const htmlBody : XMLList = html.child('body');
+						const htmlH1 : XMLList = htmlBody.child('h1');
+						
+						_service.data = htmlH1.child('span').(@id=='response');
+					}
+					catch (error : Error)
+					{
+						throw new RestError('Invalid response for MIME Type (html)');
+					}
+					finally
+					{
+						if('disposeXML' in System) System['disposeXML'](xml);
+					}
 					break;
 				default:
 					throw new RestError('Unsupported MIME Type');

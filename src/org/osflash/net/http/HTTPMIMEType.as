@@ -33,6 +33,7 @@ package org.osflash.net.http
 			{
 				case 'htm':
 				case 'html':
+				case 'xhtml':
 					return TEXT_HTML;
 				case 'txt':
 				case 'plain':
