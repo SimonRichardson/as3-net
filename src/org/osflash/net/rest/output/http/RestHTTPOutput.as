@@ -1,5 +1,7 @@
 package org.osflash.net.rest.output.http
 {
+	import flash.net.URLVariables;
+	import org.osflash.net.rest.variables.RestVariable;
 	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
@@ -119,6 +121,15 @@ package org.osflash.net.rest.output.http
 			const urlRequest : URLRequest = new URLRequest(uri);
 			
 			const requestHeaders : Array = [];
+			
+			const urlVariables : URLVariables = new URLVariables();
+			const total : int = action.variables.length;
+			for(var i : int = 0; i < total; i++)
+			{
+				const variable : RestVariable = action.variables[i];
+				if(variable.name.length > 0 && variable.variableAsString.length > 0)
+					urlVariables[variable.name] = variable.variableAsString;
+			}
 			
 			switch(action.type)
 			{
