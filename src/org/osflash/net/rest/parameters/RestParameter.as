@@ -9,7 +9,7 @@ package org.osflash.net.rest.parameters
 		/**
 		 * @private
 		 */
-		private var _parameterType : int;
+		private var _type : int;
 		
 		/**
 		 * @private
@@ -20,10 +20,10 @@ package org.osflash.net.rest.parameters
 		{
 			if(isNaN(type)) throw new ArgumentError('Type can not be a NaN');
 			
-			_parameterType = type;
+			_type = type;
 		}
 		
-		public function get parameterType() : int { return _parameterType; }
+		public function get type() : int { return _type; }
 		
 		public function get parameterValue() : * { return _parameterValue; }
 		

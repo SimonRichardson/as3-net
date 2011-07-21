@@ -1,9 +1,10 @@
 package org.osflash.net.rest.actions
 {
 	import org.osflash.net.http.HTTPMIMEType;
-	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.parameters.RestParameter;
+	import org.osflash.net.rest.services.IRestService;
+	import org.osflash.net.rest.variables.RestVariable;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -23,6 +24,11 @@ package org.osflash.net.rest.actions
 		/**
 		 * @private
 		 */
+		private var _variables : Vector.<RestVariable>;
+		
+		/**
+		 * @private
+		 */
 		private var _parameters : Vector.<RestParameter>;
 
 		public function RestAction(service : IRestService)
@@ -31,6 +37,7 @@ package org.osflash.net.rest.actions
 			
 			_service = service;
 			
+			_variables = new Vector.<RestVariable>();
 			_parameters = new Vector.<RestParameter>();
 		}
 		
@@ -80,6 +87,11 @@ package org.osflash.net.rest.actions
 		 * @inheritDoc
 		 */
 		public function get service() : IRestService { return _service; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get variables() : Vector.<RestVariable> { return _variables; }
 		
 		/**
 		 * @inheritDoc

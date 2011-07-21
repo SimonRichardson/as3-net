@@ -6,11 +6,11 @@ package org.osflash.net.rest.support.services
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.services.RestService;
 	import org.osflash.net.rest.support.User;
-	import org.osflash.net.rest.support.actions.GetUserByIdAction;
+	import org.osflash.net.rest.support.actions.PostUserAction;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class GetUserByIdService extends RestService implements IRestService
+	public class PostUserService extends RestService implements IRestService
 	{
 
 		use namespace net_namespace;
@@ -23,12 +23,18 @@ package org.osflash.net.rest.support.services
 		/**
 		 * @private
 		 */
-		private var _action : GetUserByIdAction;
+		private var _action : PostUserAction;
 		
-		public function GetUserByIdService(id : int, mimeType : HTTPMIMEType = null)
+		public function PostUserService(	firstname : String, 
+										lastname : String, 
+										companyUID : int = 0, 
+										mimeType : HTTPMIMEType = null
+										)
 		{
-			_action = new GetUserByIdAction(this);
-			_action.parameter.value = id;
+			_action = new PostUserAction(this);
+			_action.firstname.value = firstname;
+			_action.lastname.value = lastname;
+			_action.companyUID.value = companyUID;
 			
 			if(null != mimeType) _action.mimeType = mimeType;
 		}

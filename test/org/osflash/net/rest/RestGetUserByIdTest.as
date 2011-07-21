@@ -6,7 +6,6 @@ package org.osflash.net.rest
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
 
-	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.queues.HTTPQueue;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.rest.events.RestErrorEvent;
