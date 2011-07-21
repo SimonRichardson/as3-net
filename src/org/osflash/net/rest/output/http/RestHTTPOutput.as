@@ -115,20 +115,23 @@ package org.osflash.net.rest.output.http
 			
 			const uri : String = buildURI(_host.uri, service.name, action.parameters);
 			
-			debug(uri);
-			
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest(uri);
 			
 			const requestHeaders : Array = [];
 			
-			const urlVariables : URLVariables = new URLVariables();
-			const total : int = action.variables.length;
-			for(var i : int = 0; i < total; i++)
-			{
-				const variable : RestVariable = action.variables[i];
-				if(variable.name.length > 0 && variable.variableAsString.length > 0)
-					urlVariables[variable.name] = variable.variableAsString;
+			const variableTotal : int = action.variables.length;
+			if(variableTotal > 0)
+			{			
+				const urlVariables : URLVariables = new URLVariables();
+				for(var i : int = 0; i < variableTotal; i++)
+				{
+					const variable : RestVariable = action.variables[i];
+					if(variable.name.length > 0 && variable.variableAsString.length > 0)
+						urlVariables[variable.name] = variable.variableAsString;
+				}
+				
+				urlRequest.data = urlVariables;
 			}
 			
 			switch(action.type)
@@ -145,6 +148,8 @@ package org.osflash.net.rest.output.http
 			urlRequest.method = action.type == RestActionType.GET ? 
 																URLRequestMethod.GET : 
 																URLRequestMethod.POST; 
+			
+			debug(uri);
 			
 			const loader : IHTTPLoader = new HTTPURLLoader(urlLoader, urlRequest);
 			loader.registerObservable(_observer);
