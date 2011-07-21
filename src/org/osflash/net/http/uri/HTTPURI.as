@@ -131,6 +131,17 @@ package org.osflash.net.http.uri
 			}
 		}
 		
+		public function getHostURI() : String
+		{
+			const buffer : Vector.<String> = new Vector.<String>();
+			
+			buffer.push(protocol);
+			buffer.push('://');
+			buffer.push(host);
+			
+			return buffer.join('');
+		}
+		
 		public function getBaseURI() : String
 		{
 			const buffer : Vector.<String> = new Vector.<String>();

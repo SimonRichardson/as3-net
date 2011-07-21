@@ -105,7 +105,9 @@ package org.osflash.net.http.loaders.signals
 		/**
 		 * @inheritDoc
 		 */
-		public function handleSecurityErrorSignal(loader : IHTTPLoader, event : SecurityErrorEvent) : void
+		public function handleSecurityErrorSignal(	loader : IHTTPLoader, 
+													event : SecurityErrorEvent
+													) : void
 		{
 			securityErrorSignal.dispatch(loader, event);
 		}

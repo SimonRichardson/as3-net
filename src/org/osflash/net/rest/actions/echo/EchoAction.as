@@ -40,7 +40,7 @@ package org.osflash.net.rest.actions.echo
 		/**
 		 * @inheritDoc
 		 */	
-		override public function onActionData(data : *) : void
+		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
 			switch(mimeType)
 			{
@@ -82,7 +82,7 @@ package org.osflash.net.rest.actions.echo
 					break;
 			}
 			
-			super.onActionData(data);
+			super.onActionData(data, responseHeaders);
 		}
 		
 		public function get parameter() : RestUtfParameter { return _parameter; }

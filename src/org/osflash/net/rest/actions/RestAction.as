@@ -44,7 +44,7 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */
-		public function onActionData(data : *) : void
+		public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
 			throw new Error('Abstract method');
 		}

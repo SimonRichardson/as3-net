@@ -14,5 +14,7 @@ package org.osflash.net.http.loaders
 		function stop() : void;
 		
 		function get content() : *;
+		
+		function get responseHeaders() : Array;
 	}
 }

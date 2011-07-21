@@ -4,7 +4,7 @@ package org.osflash.net.rest.support.actions
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
 	import org.osflash.net.net_namespace;
-	import org.osflash.net.rest.actions.RestActionPut;
+	import org.osflash.net.rest.actions.RestActionPost;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.services.IRestService;
 	import org.osflash.net.rest.support.services.PostUserService;
@@ -13,7 +13,7 @@ package org.osflash.net.rest.support.actions
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class PostUserAction extends RestActionPut
+	public class PostUserAction extends RestActionPost
 	{
 		
 		use namespace net_namespace;
@@ -46,25 +46,27 @@ package org.osflash.net.rest.support.actions
 			
 			variables.push(_firstname = new RestUtfVariable('firstname'));
 			variables.push(_lastname = new RestUtfVariable('lastname'));
-			variables.push(_companyUID = new RestUIntVariable('company_uid'));
+			variables.push(_companyUID = new RestUIntVariable('companyuid'));
 		}
 		
 		/**
 		 * @inheritDoc
 		 */	
-		override public function onActionData(data : *) : void
+		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
+			debug(">> ", data);
+			
 			switch(mimeType)
 			{
 				case HTTPMIMEType.TEXT_XML:
-					debug(data);
+					
 					break;
 				default:
 					throw new RestError('Unsupported MIME Type');
 					break;
 			}
 			
-			super.onActionData(data);
+			super.onActionData(data, responseHeaders);
 		}
 		
 		/**

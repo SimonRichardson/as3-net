@@ -1,7 +1,5 @@
 package org.osflash.net.rest.output.http
 {
-	import flash.net.URLVariables;
-	import org.osflash.net.rest.variables.RestVariable;
 	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
@@ -16,14 +14,17 @@ package org.osflash.net.rest.output.http
 	import org.osflash.net.rest.output.IRestOutput;
 	import org.osflash.net.rest.output.utils.buildURI;
 	import org.osflash.net.rest.services.IRestService;
+	import org.osflash.net.rest.variables.RestVariable;
 
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestHeader;
 	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	import flash.utils.Dictionary;
 
 
@@ -214,6 +215,9 @@ package org.osflash.net.rest.output.http
 					case RestActionType.GET:
 						service.action.onActionData(loader.content);
 						break;
+					case RestActionType.POST:
+						service.action.onActionData(loader.content, loader.responseHeaders);
+						break;
 				}
 				
 				remove(loader);
@@ -237,7 +241,7 @@ package org.osflash.net.rest.output.http
 		}
 		
 		protected function handleSecurityErrorSignal(	loader : IHTTPLoader,
-														event : SecurityError
+														event : SecurityErrorEvent
 														) : void
 		{
 			if(null != _services[loader])
@@ -246,7 +250,7 @@ package org.osflash.net.rest.output.http
 				if(null == service) throw new RestError('Service can not be null');
 				if(null == service.action) throw new RestError('Service Action can not be null');
 				
-				service.action.onActionError(new RestError(event.message));
+				service.action.onActionError(new RestError(event.text));
 				
 				remove(loader);
 			}

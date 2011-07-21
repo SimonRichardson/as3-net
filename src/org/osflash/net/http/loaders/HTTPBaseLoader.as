@@ -93,27 +93,9 @@ package org.osflash.net.http.loaders
 		
 		public function HTTPBaseLoader(dispatcher : EventDispatcher)
 		{
-			if(null == dispatcher) throw new ArgumentError('EventDispatcher can not be null');
+			init(dispatcher);
 			
 			_listening = false;
-			
-			_nativeCompleteSignal = new NativeSignal(dispatcher, Event.COMPLETE);
-			_nativeHTTPStatusSignal = new NativeSignal(	dispatcher, 
-														HTTPStatusEvent.HTTP_STATUS, 
-														HTTPStatusEvent
-														);
-			_nativeProgressSignal = new NativeSignal(	dispatcher, 
-														ProgressEvent.PROGRESS, 
-														ProgressEvent
-														);
-			_nativeIOErrorSignal = new NativeSignal(	dispatcher,
-														IOErrorEvent.IO_ERROR,
-														IOErrorEvent
-														);
-			_nativeSecurityErrorSignal = new NativeSignal(	dispatcher,
-															SecurityErrorEvent.SECURITY_ERROR,
-															SecurityErrorEvent
-															);
 		}
 
 		/**
@@ -165,6 +147,29 @@ package org.osflash.net.http.loaders
 			securityErrorSignal.remove(observer.handleSecurityErrorSignal);
 		}
 		
+		protected function init(dispatcher : EventDispatcher) : void
+		{
+			if(null == dispatcher) throw new ArgumentError('EventDispatcher can not be null');
+			
+			_nativeCompleteSignal = new NativeSignal(dispatcher, Event.COMPLETE);
+			_nativeHTTPStatusSignal = new NativeSignal(	dispatcher, 
+														HTTPStatusEvent.HTTP_STATUS, 
+														HTTPStatusEvent
+														);
+			_nativeProgressSignal = new NativeSignal(	dispatcher, 
+														ProgressEvent.PROGRESS, 
+														ProgressEvent
+														);
+			_nativeIOErrorSignal = new NativeSignal(	dispatcher,
+														IOErrorEvent.IO_ERROR,
+														IOErrorEvent
+														);
+			_nativeSecurityErrorSignal = new NativeSignal(	dispatcher,
+															SecurityErrorEvent.SECURITY_ERROR,
+															SecurityErrorEvent
+															);
+		}
+		
 		protected function register() : void
 		{
 			_nativeCompleteSignal.add(handleCompleteSignal);
@@ -213,6 +218,11 @@ package org.osflash.net.http.loaders
 		}
 		
 		public function get content() : * 
+		{
+			throw new Error('Abstract method');
+		}
+		
+		public function get responseHeaders() : Array
 		{
 			throw new Error('Abstract method');
 		}

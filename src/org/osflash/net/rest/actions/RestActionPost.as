@@ -17,7 +17,7 @@ package org.osflash.net.rest.actions
 		/**
 		 * @inheritDoc
 		 */	
-		override public function onActionData(data : *) : void
+		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
 			service.completedSignal.dispatch(service);
 		}

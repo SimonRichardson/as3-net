@@ -45,7 +45,7 @@ package org.osflash.net.rest
 			const firstName : String = 'Firstname ' + time;
 			const lastName : String = 'Lastname' + time;
 			
-			const service : IRestService = new PostUserService(firstName, lastName);
+			const service : IRestService = new PostUserService(firstName, lastName, 1);
 			service.completedSignal.add(async.add(handleCompletedSignal, 2000));
 			service.errorSignal.add(handleErrorSignal);
 			

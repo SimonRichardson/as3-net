@@ -12,7 +12,7 @@ package org.osflash.net.rest.actions
 	public interface IRestAction
 	{
 		
-		function onActionData(data : *) : void;
+		function onActionData(data : *, responseHeaders : Array = null) : void;
 		
 		function onActionStatus(status : int) : void;
 

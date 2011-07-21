@@ -41,7 +41,7 @@ package org.osflash.net.rest.support.actions
 		/**
 		 * @inheritDoc
 		 */	
-		override public function onActionData(data : *) : void
+		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
 			switch(mimeType)
 			{
@@ -71,7 +71,7 @@ package org.osflash.net.rest.support.actions
 					break;
 			}
 			
-			super.onActionData(data);
+			super.onActionData(data, responseHeaders);
 		}
 		
 		/**

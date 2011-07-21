@@ -32,7 +32,7 @@ package org.osflash.net.rest.support.actions
 		/**
 		 * @inheritDoc
 		 */
-		override public function onActionData(data : *) : void
+		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
 			const users : Vector.<User> = new Vector.<User>();
 			
@@ -67,7 +67,7 @@ package org.osflash.net.rest.support.actions
 					break;
 			}
 
-			super.onActionData(data);
+			super.onActionData(data, responseHeaders);
 		}
 	}
 }
