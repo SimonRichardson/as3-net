@@ -1,9 +1,10 @@
 package org.osflash.net.rest
 {
+	import asunit.asserts.assertNotNull;
+	import asunit.asserts.assertTrue;
 	import asunit.asserts.fail;
 	import asunit.framework.IAsync;
 
-	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.queues.HTTPQueue;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.rest.events.RestErrorEvent;
@@ -54,7 +55,12 @@ package org.osflash.net.rest
 		
 		private function handleCompletedSignal(service : IRestService) : void
 		{
-			debug(PostUserService(service).user);
+			const postUserService : PostUserService = service as PostUserService;
+			
+			assertTrue('Service should be PostUserService', service is PostUserService);
+			assertNotNull('PostUserService should not be null', postUserService);
+			assertNotNull('PostUserService user should not be null', postUserService.user);
+			assertTrue('User id should be greater than 0', postUserService.user.id > 0);
 		}
 		
 		private function handleErrorSignal(service : IRestService, event : RestErrorEvent) : void

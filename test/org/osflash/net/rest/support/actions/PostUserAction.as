@@ -1,15 +1,17 @@
 package org.osflash.net.rest.support.actions
 {
-	import org.osflash.logger.logs.debug;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
 	import org.osflash.net.net_namespace;
 	import org.osflash.net.rest.actions.RestActionPost;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.services.IRestService;
+	import org.osflash.net.rest.support.User;
 	import org.osflash.net.rest.support.services.PostUserService;
 	import org.osflash.net.rest.variables.RestUIntVariable;
 	import org.osflash.net.rest.variables.RestUtfVariable;
+
+	import flash.system.System;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
@@ -54,12 +56,28 @@ package org.osflash.net.rest.support.actions
 		 */	
 		override public function onActionData(data : *, responseHeaders : Array = null) : void
 		{
-			debug(">> ", data);
-			
 			switch(mimeType)
 			{
 				case HTTPMIMEType.TEXT_XML:
-					
+					try
+					{
+						const xml : XML = new XML(data);
+						const uid : int = parseInt(xml.child('uid').text());
+						const firstname : String = xml.child('firstname').text();
+						const lastname : String = xml.child('lastname').text();
+						const companyUID : int = parseInt(xml.child('company_uid').text());
+						
+						const user : User = new User(uid, firstname, lastname, companyUID);
+						_service.data = user;
+					}
+					catch (error : Error)
+					{
+						throw new RestError('Invalid response for MIME Type (xml)');
+					}
+					finally
+					{
+						if('disposeXML' in System) System['disposeXML'](xml);
+					}
 					break;
 				default:
 					throw new RestError('Unsupported MIME Type');
