@@ -30,7 +30,6 @@ package org.osflash.net.rest.actions
 			if(null == service) throw new ArgumentError('Service can not be null');
 			
 			_service = service;
-			_mimeType = HTTPMIMEType.TEXT_XML;
 			
 			_parameters = new Vector.<RestParameter>();
 		}
@@ -71,7 +70,11 @@ package org.osflash.net.rest.actions
 		 * @inheritDoc
 		 */
 		public function get mimeType() : HTTPMIMEType { return _mimeType; }
-		public function set mimeType(value : HTTPMIMEType) : void { _mimeType = value; }
+		public function set mimeType(value : HTTPMIMEType) : void 
+		{ 
+			if(null == value) throw new ArgumentError('Mime type can not be null');
+			_mimeType = value; 
+		}
 		
 		/**
 		 * @inheritDoc

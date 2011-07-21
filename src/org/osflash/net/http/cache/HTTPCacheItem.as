@@ -1,5 +1,7 @@
 package org.osflash.net.http.cache
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.system.System;
 	import flash.utils.getTimer;
 	/**
@@ -49,13 +51,11 @@ package org.osflash.net.http.cache
 		 */
 		public function clear() : void
 		{
-			if(_content is XML)
+			if(_content is Bitmap) Bitmap(_content).bitmapData.dispose();
+			else if(_content is BitmapData) BitmapData(_content).dispose();
+			else if(_content is XML)
 			{
-				try
-				{
-					System['disposeXML'](_content);
-				}
-				catch(error : Error){}
+				if('disposeXML' in System) System['disposeXML'](_content);
 			}
 			
 			_content = null;

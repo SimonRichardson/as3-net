@@ -4,7 +4,7 @@ package org.osflash.net.http.uri
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class HTTPURIParameters
+	public class HTTPURIParameter
 	{
 		
 		/**
@@ -21,14 +21,14 @@ package org.osflash.net.http.uri
 		 * @param name value of the URI parameter
 		 * @param value of the URI parameter
 		 */
-		public function HTTPURIParameters(name : String, value : String)
+		public function HTTPURIParameter(name : String, value : String)
 		{
 			if(null == name) throw new ArgumentError('Name can not be null');
 			if(name.length == 0) throw new ArgumentError('Name can not be empty');
 			if(null == value) throw new ArgumentError('Value can not be null');
 			
-			_name = name;
-			_value = value;
+			_name = encodeURIComponent(name);
+			_value = encodeURIComponent(value);
 		}
 
 		/**
@@ -38,12 +38,18 @@ package org.osflash.net.http.uri
 		 * @return HTTPUniformResourceIdentifierParameters
 		 */
 		public static function fromUniformedString(	parameter : String
-													) : HTTPURIParameters
+													) : HTTPURIParameter
 		{
 			const split : Array = parameter.split("=");
 			if (split.length != 2) throw new HTTPError("Unable to split the parameters");
 			
-			return new HTTPURIParameters(split[0], split[1]);
+			return new HTTPURIParameter(split[0], split[1]);
+		}
+		
+		public function getParameterAsString() : String
+		{
+			if(value.length == 0) return name;
+			else return name + '=' + value;
 		}
 
 		/**

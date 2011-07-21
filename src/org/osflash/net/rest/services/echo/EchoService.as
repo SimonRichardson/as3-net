@@ -27,8 +27,9 @@ package org.osflash.net.rest.services.echo
 		public function EchoService(value : String, mimeType : HTTPMIMEType = null)
 		{
 			_action = new EchoAction(this);
-			_action.mimeType = mimeType;
 			_action.parameter.value = value;
+			
+			if(null != mimeType) _action.mimeType = mimeType;
 		}
 		
 		public function get response() : String

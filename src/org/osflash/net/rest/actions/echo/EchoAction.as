@@ -1,5 +1,6 @@
 package org.osflash.net.rest.actions.echo
 {
+	import flash.system.System;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.net_namespace;
@@ -33,6 +34,8 @@ package org.osflash.net.rest.actions.echo
 			_service = EchoService(service);
 			
 			parameters.push(_parameter = new RestUtfParameter());
+			
+			
 		}
 		
 		/**
@@ -40,12 +43,13 @@ package org.osflash.net.rest.actions.echo
 		 */	
 		override public function onActionData(data : *) : void
 		{
-			// TODO : do different mime types!
 			switch(mimeType)
 			{
 				case HTTPMIMEType.TEXT_XML:
 					const xml : XML = new XML(data);
 					_service.data = xml.child('response');
+					
+					if('disposeXML' in System) System['disposeXML'](xml);
 					break;
 				default:
 					throw new RestError('Unsupported MIME Type');

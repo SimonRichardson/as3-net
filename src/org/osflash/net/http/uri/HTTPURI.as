@@ -48,7 +48,7 @@ package org.osflash.net.http.uri
 		/**
 		 * @private
 		 */
-		private var _parameters : Vector.<HTTPURIParameters>;
+		private var _parameters : Vector.<HTTPURIParameter>;
 
 		/**
 		 * Constructor for the HTTP URI Parser
@@ -71,8 +71,8 @@ package org.osflash.net.http.uri
 				return;
 			}
 
-			_protocol = results["protocol"];
-			_host = results["host"];
+			_protocol = encodeURIComponent(results["protocol"]);
+			_host = encodeURIComponent(results["host"]);
 			_port = 80;
 
 			if (null == results["port"] || results["port"] == "")
@@ -80,11 +80,12 @@ package org.osflash.net.http.uri
 				_port = isNaN(parseInt(results["port"])) ? 80 : parseInt(results["port"]);
 			}
 
-			_path = results["path"];
+			_path = encodeURI(results["path"]);
 
-			const pathsValue : Array = _path.split("/");
+			const paths : String = results["path"];
+			const pathsValue : Array = paths.split("/");
 			const pathsTotal : int = pathsValue.length;
-
+			
 			_paths = new Vector.<String>(pathsTotal, true);
 			_extension = "";
 
@@ -94,17 +95,17 @@ package org.osflash.net.http.uri
 				if (j == pathsTotal - 1)
 				{
 					const index : int = p.lastIndexOf(".");
-					if (index > 1)
+					if (index >= 0)
 					{
 						_extension = p.slice(index + 1);
 						p = p.slice(0, index);
 					}
 				}
 				
-				_paths[j] = p;
+				_paths[j] = encodeURIComponent(p);
 			}
 			
-			_parameters = new Vector.<HTTPURIParameters>();
+			_parameters = new Vector.<HTTPURIParameter>();
 
 			var params : String = results["parameters"];
 			if (null != params && params != "")
@@ -116,8 +117,42 @@ package org.osflash.net.http.uri
 				const total : int = pairs.length;
 				for (var i : int = 0; i < total; i++)
 				{
-					_parameters.push(HTTPURIParameters.fromUniformedString(pairs[i]));
+					_parameters.push(HTTPURIParameter.fromUniformedString(pairs[i]));
 				}
+			}
+		}
+		
+		public function getBaseURI() : String
+		{
+			const buffer : Vector.<String> = new Vector.<String>();
+			
+			buffer.push(protocol);
+			buffer.push('://');
+			buffer.push(host);
+			
+			if(port != 80) buffer.push(':', port);
+			
+			if(paths.length > 0) buffer.splice.apply(null, [buffer.length, 0, paths.join('/')]);
+			
+			return buffer.join('');
+		}
+		
+		public function getParametersAsString() : String
+		{
+			const total : int = _parameters.length;
+			if(total == 0) return '';
+			else if(total == 1) return _parameters[0].getParameterAsString();
+			else 
+			{
+				const buffer : Vector.<String> = new Vector.<String>();
+				
+				for(var i : int = 0; i<total; i++)
+				{
+					const parameter : HTTPURIParameter = _parameters[i];
+					buffer.push(parameter.getParameterAsString());
+				}
+				
+				return buffer.join('&');
 			}
 		}
 		
@@ -175,6 +210,6 @@ package org.osflash.net.http.uri
 		 * 
 		 * @return Vector.<HTTPUniformResourceIdentifierParameters>
 		 */
-		public function get parameters() : Vector.<HTTPURIParameters> { return _parameters; }
+		public function get parameters() : Vector.<HTTPURIParameter> { return _parameters; }
 	}
 }

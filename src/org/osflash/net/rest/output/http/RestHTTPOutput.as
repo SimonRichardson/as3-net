@@ -1,18 +1,17 @@
 package org.osflash.net.rest.output.http
 {
-	import flash.net.URLRequestHeader;
-	import org.osflash.net.rest.output.utils.buildURI;
-	import flash.net.URLRequestMethod;
-	import org.osflash.net.rest.actions.IRestAction;
+	import org.osflash.net.http.HTTPMIMEType;
 	import org.osflash.net.http.HTTPStatusCode;
 	import org.osflash.net.http.loaders.HTTPURLLoader;
 	import org.osflash.net.http.loaders.IHTTPLoader;
 	import org.osflash.net.http.loaders.signals.HTTPLoaderObserver;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.rest.RestHost;
+	import org.osflash.net.rest.actions.IRestAction;
 	import org.osflash.net.rest.actions.RestActionType;
 	import org.osflash.net.rest.errors.RestError;
 	import org.osflash.net.rest.output.IRestOutput;
+	import org.osflash.net.rest.output.utils.buildURI;
 	import org.osflash.net.rest.services.IRestService;
 
 	import flash.events.Event;
@@ -20,6 +19,8 @@ package org.osflash.net.rest.output.http
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
+	import flash.net.URLRequestMethod;
 	import flash.utils.Dictionary;
 
 
@@ -103,7 +104,13 @@ package org.osflash.net.rest.output.http
 			
 			const action : IRestAction = service.action;
 			
-			const uri : String = buildURI(_host.baseURI, service.name, action.parameters);
+			if(null == action.mimeType) 
+			{
+				const extension : String = _host.uri.extension;
+				action.mimeType = HTTPMIMEType.getMimeTypeByName(extension);
+			}
+			
+			const uri : String = buildURI(_host.uri, service.name, action.parameters);
 			
 			const urlLoader : URLLoader = new URLLoader();
 			const urlRequest : URLRequest = new URLRequest(uri);

@@ -1,15 +1,17 @@
 package org.osflash.net.rest.output.utils
 {
+	import org.osflash.net.http.uri.HTTPURI;
 	import org.osflash.net.rest.parameters.RestParameter;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public function buildURI(	uri : String, 
-								method : String, 
+	public function buildURI(	uri : HTTPURI, 
+								method : String,
 								parameters : Vector.<RestParameter>
 								) : String
 	{
-		const euri : String = encodeURI(uri);
+		
+		const euri : String = encodeURI(uri.getBaseURI());
 		const emethod : String = encodeURI(method);
 		
 		const buffer : Vector.<String> = new Vector.<String>();
@@ -24,6 +26,6 @@ package org.osflash.net.rest.output.utils
 			buffer.push(parameter.parameterAsString);
 		}
 		
-		return buffer.join('/');
+		return buffer.join('/') + '?' + uri.getParametersAsString();
 	}
 }
