@@ -66,7 +66,7 @@ package org.osflash.net.http.queues
 		/**
 		 * @inheritDoc
 		 */
-		public function removeAll() : void
+		public function removeAll(keepActiveLoader : Boolean = false) : void
 		{
 			var index : int = _queues.length;
 			while(--index > -1)

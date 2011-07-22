@@ -100,9 +100,9 @@ package org.osflash.net.http.queues
 		/**
 		 * @inheritDoc
 		 */
-		public function removeAll() : void
+		public function removeAll(keepActiveLoader : Boolean = false) : void
 		{
-			if(_active) 
+			if(!keepActiveLoader && _active) 
 			{
 				_active.unregisterObservable(_observer);
 				

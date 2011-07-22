@@ -11,7 +11,7 @@ package org.osflash.net.http.queues
 		
 		function remove(loader : IHTTPLoader) : IHTTPLoader;
 		
-		function removeAll() : void;
+		function removeAll(keepActiveLoader : Boolean = false) : void;
 		
 		function contains(loader : IHTTPLoader) : Boolean;
 		

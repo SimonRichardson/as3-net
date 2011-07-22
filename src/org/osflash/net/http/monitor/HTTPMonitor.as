@@ -82,7 +82,7 @@ package org.osflash.net.http.monitor
 		{
 			_timer.stop();
 			
-			_queue.removeAll();
+			_queue.removeAll(true);
 		}
 		
 		/**
