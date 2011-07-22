@@ -62,6 +62,19 @@ package org.osflash.net.http.queues
 			
 			return null;
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function removeAll() : void
+		{
+			var index : int = _queues.length;
+			while(--index > -1)
+			{
+				const queue : IHTTPQueue = _queues[index];
+				queue.removeAll();
+			}
+		}
 
 		/**
 		 * @inheritDoc

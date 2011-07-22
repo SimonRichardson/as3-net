@@ -100,6 +100,24 @@ package org.osflash.net.http.queues
 		/**
 		 * @inheritDoc
 		 */
+		public function removeAll() : void
+		{
+			if(_active) 
+			{
+				_active.unregisterObservable(_observer);
+				
+				_active.stop();
+				_active = null;
+			}
+			
+			_queue.length = 0;
+			
+			_running = false;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
 		public function contains(loader : IHTTPLoader) : Boolean
 		{
 			if(_active == loader) return true;
