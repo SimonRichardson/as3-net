@@ -3,7 +3,10 @@ package org.osflash.net.http.queues
 	import org.osflash.logger.logs.error;
 	import org.osflash.net.http.errors.HTTPError;
 	import org.osflash.net.http.loaders.IHTTPLoader;
+	import org.osflash.net.http.loaders.signals.HTTPLoaderObserver;
 	import org.osflash.net.net_namespace;
+
+	import flash.events.Event;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -25,9 +28,20 @@ package org.osflash.net.http.queues
 		 */
 		private var _queue : Vector.<IHTTPQueueBinding>;
 		
+		/**
+		 * @private
+		 */
+		private var _observer : HTTPLoaderObserver;
+		
 		public function HTTPQueue()
 		{
 			_queue = new Vector.<IHTTPQueueBinding>();
+			
+			_observer = new HTTPLoaderObserver();
+			_observer.stopSignal.add(handleStopSignal);
+			_observer.completeSignal.add(handleCompleteSignal);
+			_observer.ioErrorSignal.add(handleErrorSignal);
+			_observer.securityErrorSignal.add(handleCompleteSignal);
 		}
 		
 		/**
@@ -52,20 +66,31 @@ package org.osflash.net.http.queues
 		{
 			if(null == loader) throw new ArgumentError('Loader can not be null');
 			
-			const index : int = getIndex(loader);
-			if(index >= 0)
+			if(_active == loader) 
 			{
-				const item : IHTTPLoader = _queue.splice(index, 1) as IHTTPLoader;
-				if(item != loader) throw new HTTPError('IHTTPLoader mismatch');
+				_active.unregisterObservable(_observer);
 				
-				if(_active == loader) 
+				_active.stop();
+				_active = null;
+					
+				_running = false;
+					
+				advance();
+			}
+			else
+			{
+				const index : int = getIndex(loader);
+				if(index >= 0)
 				{
-					_active.stop();
-					_active = null;
+					loader.unregisterObservable(_observer);
 					
-					_running = false;
+					const bindings : Vector.<IHTTPQueueBinding> = _queue.splice(index, 1);
+					if(bindings.length > 1) throw new HTTPError('HTTPQueue Buffer Overflow');
 					
-					advance();
+					const binding : IHTTPQueueBinding = bindings[0];
+					if(binding.loader != loader) throw new HTTPError('IHTTPLoader mismatch');
+										
+					advance();	
 				}
 			}
 			
@@ -74,29 +99,18 @@ package org.osflash.net.http.queues
 		
 		/**
 		 * @inheritDoc
-		 */		
-		public function getIndex(loader : IHTTPLoader) : int
-		{
-			var index : int = _queue.length;
-			while(--index > -1)
-			{
-				const binding : IHTTPQueueBinding = _queue[index];
-				if(binding.loader == loader) return index;
-			}
-			return -1;
-		}
-
-		/**
-		 * @inheritDoc
 		 */
 		public function contains(loader : IHTTPLoader) : Boolean
 		{
+			if(_active == loader) return true;
+			
 			var index : int = _queue.length;
 			while(--index > -1)
 			{
 				const binding : IHTTPQueueBinding = _queue[index];
 				if(binding.loader == loader) return true;
 			}
+			
 			return false;
 		}
 
@@ -140,6 +154,7 @@ package org.osflash.net.http.queues
 			
 			try
 			{
+				_active.registerObservable(_observer);
 				_active.start(this);
 			}
 			catch(http : HTTPError)
@@ -154,13 +169,51 @@ package org.osflash.net.http.queues
 				}
 				finally
 				{
-					advance();
+					remove(_active);
 				}
 			}
 			catch(startError : Error)
 			{
 				throw startError;
 			}
+		}
+		
+		/**
+		 * @private
+		 */		
+		private function getIndex(loader : IHTTPLoader) : int
+		{
+			var index : int = _queue.length;
+			while(--index > -1)
+			{
+				const binding : IHTTPQueueBinding = _queue[index];
+				if(binding.loader == loader) return index;
+			}
+			return -1;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function handleErrorSignal(loader : IHTTPLoader, event : Event) : void
+		{
+			remove(loader);
+		}
+
+		/**
+		 * @private
+		 */
+		private function handleCompleteSignal(loader : IHTTPLoader, event : Event) : void
+		{
+			remove(loader);
+		}
+
+		/**
+		 * @private
+		 */
+		private function handleStopSignal(loader : IHTTPLoader) : void
+		{
+			remove(loader);
 		}
 		
 		/**

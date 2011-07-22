@@ -91,6 +91,16 @@ package org.osflash.net.http.queues
 			}
 		}
 		
-		public function get length() : int { return _queues.length;	}
+		public function get length() : int 
+		{ 
+			var total : int = 0;
+			var index : int = _queues.length;
+			while(--index > -1)
+			{
+				const queue : IHTTPQueue = _queues[index]; 
+				total += queue.length;
+			}
+			return total;	
+		}
 	}
 }

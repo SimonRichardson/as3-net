@@ -44,6 +44,16 @@ package org.osflash.net.http.loaders
 			_request = request;
 		}
 		
+		public static function fromURL(uri : String) : HTTPURLLoader
+		{
+			return new HTTPURLLoader(new URLLoader(), new URLRequest(uri));
+		}
+		
+		public static function fromURLRequest(request : URLRequest) : HTTPURLLoader
+		{
+			return new HTTPURLLoader(new URLLoader(), request);
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -200,6 +210,9 @@ package org.osflash.net.http.loaders
 		/**
 		 * @inheritDoc
 		 */	
-		override public function get responseHeaders() : Array { return null; }
+		override public function get responseHeaders() : Array
+		{
+			return null;
+		}
 	}
 }
