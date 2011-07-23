@@ -1,5 +1,6 @@
 package org.osflash.net.http.cache
 {
+	import org.osflash.net.http.errors.HTTPError;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
@@ -99,7 +100,11 @@ package org.osflash.net.http.cache
 				const item : IHTTPCacheItem = _items[index];
 				if(item.expiry < 0 || null == item.content) 
 				{
-					_items.splice(index, 1);
+					const items : Vector.<IHTTPCacheItem> = _items.splice(index, 1);
+					if(items.length != 1) throw new HTTPError('Invalid number of cache items');
+					if(item != items[0]) throw new HTTPError('Removal mismatch');
+					
+					item.clear();
 				}
 			}
 		}
