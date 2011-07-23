@@ -38,7 +38,12 @@ package org.osflash.net.http.cache
 			if(null == item) throw new ArgumentError('Item can not be null');
 			
 			const index : int = _items.indexOf(item);
-			if(index >= 0) _items.splice(index, 1);
+			if(index >= 0) 
+			{
+				const items : Vector.<IHTTPCacheItem> = _items.splice(index, 1);
+				if(items.length != 1) throw new HTTPError('Invalid number of cache items');
+				if(item != items[0]) throw new HTTPError('Removal mismatch');
+			}
 			
 			return item;
 		}
@@ -100,10 +105,8 @@ package org.osflash.net.http.cache
 				const item : IHTTPCacheItem = _items[index];
 				if(item.expiry < 0 || null == item.content) 
 				{
-					const items : Vector.<IHTTPCacheItem> = _items.splice(index, 1);
-					if(items.length != 1) throw new HTTPError('Invalid number of cache items');
-					if(item != items[0]) throw new HTTPError('Removal mismatch');
-					
+					remove(item);
+										
 					item.clear();
 				}
 			}
