@@ -1,5 +1,8 @@
 package org.osflash.net.http.loaders
 {
+	import org.osflash.net.http.cache.IHTTPCacheItem;
+	import org.osflash.net.http.cache.HTTPCacheItem;
+	import org.osflash.net.http.cache.IHTTPCache;
 	import org.osflash.logger.utils.getDefaultLogger;
 	import org.osflash.logger.logs.debug;
 	import org.osflash.logger.logs.error;
@@ -33,6 +36,11 @@ package org.osflash.net.http.loaders
 		 * @private
 		 */
 		private var _request : URLRequest;
+		
+		/**
+		 * @private
+		 */
+		private var _cacheItem : IHTTPCacheItem;
 
 		public function HTTPURLLoader(loader : URLLoader, request : URLRequest)
 		{
@@ -73,10 +81,10 @@ package org.osflash.net.http.loaders
 	                const urlRequestHeader : URLRequestHeader = requestHeaders[n];
 					info("\t", urlRequestHeader.name + ":" + urlRequestHeader.value);
 				}
+				
 				if (_request.data != null && _request.data is URLVariables)
 				{
 					const urlVariables : URLVariables = URLVariables(_request.data);
-					
 					for (var item : String in urlVariables)
 					{
 						info("\t", item + "=" + urlVariables[item]);
@@ -84,11 +92,30 @@ package org.osflash.net.http.loaders
 				}
 			}
 			
-			register();
-			
-			startSignal.dispatch(this);
-			
-			_loader.load(request);
+			if(null != _cacheItem && null != _cacheItem.content) 
+			{
+				if(getDefaultLogger().enabled)
+				{
+					info("Cache response", _request.url, "(" + _request.method + ")");
+				}
+				
+				// Response back with a successful sequence.
+				startSignal.dispatch(this);
+				handleHTTPStatusSignal(new HTTPStatusEvent(	HTTPStatusEvent.HTTP_STATUS,
+															false,
+															false, 
+															HTTPStatusCode.NOT_MODIFIED
+															));
+				completeSignal.dispatch(this, new Event(Event.COMPLETE));
+			}
+			else
+			{
+				register();
+				
+				startSignal.dispatch(this);
+				
+				_loader.load(request);
+			}
 		}
 
 		/**
@@ -137,6 +164,8 @@ package org.osflash.net.http.loaders
 				}
 			}
 			
+			if(null != _cacheItem) _cacheItem.content = _loader.data;
+			
 			super.handleCompleteSignal(event);
 		}
 		
@@ -150,6 +179,8 @@ package org.osflash.net.http.loaders
 				info("Status:", _request.url, HTTPStatusCode.codeToString(event.status));
 			}
 			
+			if(null != _cacheItem) _cacheItem.status = event.status;
+			
 			super.handleHTTPStatusSignal(event);
 		}
 
@@ -161,27 +192,9 @@ package org.osflash.net.http.loaders
 			if(getDefaultLogger().enabled)
 			{
 				error("IOError:", _request.url, event.text);
-	
-				try
-				{
-					if (_loader.data is String)
-					{
-						error(indent(new XML(String(_loader.data)).toXMLString()));
-					}
-	                else if (_loader.data is XML)
-					{
-						error(indent(XML(_loader.data).toXMLString()));
-					}
-					else
-					{
-						error("\t(Unknown)", _loader.data);
-					}
-				}
-	            catch (e : Error)
-				{
-					error(e);
-				}
 			}
+			
+			if(null != _cacheItem) _cacheItem.content = null;
 			
 			super.handleIOErrorSignal(event);
 		}
@@ -195,6 +208,8 @@ package org.osflash.net.http.loaders
 			{
 				error("SecurityError:", _request.url, event.text);
 			}
+			
+			if(null != _cacheItem) _cacheItem.content = null;
 			
 			super.handleSecurityErrorSignal(event);
 		}
@@ -221,14 +236,37 @@ package org.osflash.net.http.loaders
 		/**
 		 * @inheritDoc
 		 */	
-		override public function get content() : * { return _loader.data; }
+		override public function get content() : * 
+		{
+			// Return the cached response as the loader might be gc'd?
+			if(null != cache && null != _cacheItem && null != _cacheItem.content) 
+				return _cacheItem.content;
+			else return _loader.data; 
+		}
 		
 		/**
 		 * @inheritDoc
 		 */	
-		override public function get responseHeaders() : Array
+		override public function get responseHeaders() : Array { return null; }
+		
+		/**
+		 * @inheritDoc
+		 */	
+		override public function set cache(value : IHTTPCache) : void
 		{
-			return null;
+			// Remove any previous cache item
+			if(null != cache && null != _cacheItem && cache.contains(_cacheItem))
+				cache.remove(_cacheItem);
+			
+			// Set the new cache
+			super.cache = value;
+			
+			// Add it to the new cache
+			if(null != cache) 
+			{
+				if(null == _cacheItem) cache.add(_cacheItem = new HTTPCacheItem(request.url));
+				else cache.add(_cacheItem);
+			}
 		}
 	}
 }

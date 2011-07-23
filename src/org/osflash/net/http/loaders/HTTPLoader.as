@@ -4,6 +4,9 @@ package org.osflash.net.http.loaders
 	import org.osflash.logger.logs.info;
 	import org.osflash.logger.utils.getDefaultLogger;
 	import org.osflash.net.http.HTTPStatusCode;
+	import org.osflash.net.http.cache.HTTPCacheItem;
+	import org.osflash.net.http.cache.IHTTPCache;
+	import org.osflash.net.http.cache.IHTTPCacheItem;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.net_namespace;
 
@@ -38,6 +41,11 @@ package org.osflash.net.http.loaders
 		 * @private
 		 */
 		private var _context : LoaderContext;
+		
+		/**
+		 * @private
+		 */
+		private var _cacheItem : IHTTPCacheItem;
 		
 		public function HTTPLoader(	loader : Loader, 
 									request : URLRequest, 
@@ -93,11 +101,30 @@ package org.osflash.net.http.loaders
 				}
 			}
 			
-			register();
+			if(null != _cacheItem && null != _cacheItem.content) 
+			{
+				if(getDefaultLogger().enabled)
+				{
+					info("Cache response", _request.url, "(" + _request.method + ")");
+				}
+				
+				// Response back with a successful sequence.
+				startSignal.dispatch(this);
+				handleHTTPStatusSignal(new HTTPStatusEvent(	HTTPStatusEvent.HTTP_STATUS,
+															false,
+															false, 
+															HTTPStatusCode.NOT_MODIFIED
+															));
+				completeSignal.dispatch(this, new Event(Event.COMPLETE));
+			}
+			else
+			{
+				register();
 			
-			startSignal.dispatch(this);
+				startSignal.dispatch(this);
 			
-			_loader.load(request, context);
+				_loader.load(request, context);
+			}
 		}
 
 		/**
@@ -127,6 +154,8 @@ package org.osflash.net.http.loaders
 				info("Complete:", _request.url);
 			}
 			
+			if(null != _cacheItem) _cacheItem.content = _loader.content;
+			
 			super.handleCompleteSignal(event);
 		}
 		
@@ -139,6 +168,8 @@ package org.osflash.net.http.loaders
 			{
 				info("Status:", _request.url, HTTPStatusCode.codeToString(event.status));
 			}
+			
+			if(null != _cacheItem) _cacheItem.status = event.status;
 			
 			super.handleHTTPStatusSignal(event);
 		}
@@ -153,6 +184,8 @@ package org.osflash.net.http.loaders
 				error("IOError:", _request.url, event.text);
 			}
 			
+			if(null != _cacheItem) _cacheItem.content = null;
+			
 			super.handleIOErrorSignal(event);
 		}
 
@@ -166,6 +199,8 @@ package org.osflash.net.http.loaders
 				error("SecurityError:", _request.url, event.text);
 			}
 			
+			if(null != _cacheItem) _cacheItem.content = null;
+			
 			super.handleSecurityErrorSignal(event);
 		}
 		
@@ -175,6 +210,35 @@ package org.osflash.net.http.loaders
 		
 		public function get context() : LoaderContext { return _context; }
 		
-		override public function get content() : * { return _loader.content; }
+		/**
+		 * @inheritDoc
+		 */	
+		override public function get content() : * 
+		{
+			// Return the cached response as the loader might be gc'd?
+			if(null != cache && null != _cacheItem && null != _cacheItem.content) 
+				return _cacheItem.content;
+			else return _loader.content; 
+		}
+		
+		/**
+		 * @inheritDoc
+		 */	
+		override public function set cache(value : IHTTPCache) : void
+		{
+			// Remove any previous cache item
+			if(null != cache && null != _cacheItem && cache.contains(_cacheItem))
+				cache.remove(_cacheItem);
+			
+			// Set the new cache
+			super.cache = value;
+			
+			// Add it to the new cache
+			if(null != cache) 
+			{
+				if(null == _cacheItem) cache.add(_cacheItem = new HTTPCacheItem(request.url));
+				else cache.add(_cacheItem);
+			}
+		}
 	}
 }

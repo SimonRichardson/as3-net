@@ -31,7 +31,7 @@ package org.osflash.net.http.cache
 		private var _time : int;
 				
 		public function HTTPCacheItem(	id : String, 
-										status : int, 
+										status : int = -1, 
 										time : int = NaN, 
 										content : * = null
 										)

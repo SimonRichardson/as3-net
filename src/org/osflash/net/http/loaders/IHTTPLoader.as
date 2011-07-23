@@ -1,5 +1,6 @@
 package org.osflash.net.http.loaders
 {
+	import org.osflash.net.http.cache.IHTTPCache;
 	import org.osflash.net.http.loaders.signals.IHTTPLoaderObservable;
 	import org.osflash.net.http.loaders.signals.IHTTPLoaderSignals;
 	import org.osflash.net.http.queues.IHTTPQueue;
@@ -16,5 +17,8 @@ package org.osflash.net.http.loaders
 		function get content() : *;
 		
 		function get responseHeaders() : Array;
+		
+		function get cache() : IHTTPCache;
+		function set cache(value : IHTTPCache) : void;
 	}
 }

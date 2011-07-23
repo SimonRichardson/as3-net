@@ -1,5 +1,6 @@
 package org.osflash.net.http.loaders
 {
+	import org.osflash.net.http.cache.IHTTPCache;
 	import org.osflash.net.http.loaders.signals.IHTTPLoaderObserver;
 	import org.osflash.net.http.queues.IHTTPQueue;
 	import org.osflash.net.net_namespace;
@@ -20,6 +21,11 @@ package org.osflash.net.http.loaders
 	 */
 	public class HTTPBaseLoader implements IHTTPLoader
 	{
+		
+		/**
+		 * @private
+		 */
+		private var _cache : IHTTPCache;
 		
 		/**
 		 * @private
@@ -273,6 +279,15 @@ package org.osflash.net.http.loaders
 			return _securityErrorSignal;
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		public function get cache() : IHTTPCache { return _cache; }
+		public function set cache(value : IHTTPCache) : void { _cache = value; }
+		
+		/**
+		 * @private
+		 */
 		net_namespace function get queue() : IHTTPQueue { return _queue; }
 	}
 }
