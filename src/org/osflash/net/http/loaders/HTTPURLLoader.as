@@ -1,5 +1,6 @@
 package org.osflash.net.http.loaders
 {
+	import org.osflash.logger.utils.getDefaultLogger;
 	import org.osflash.logger.logs.debug;
 	import org.osflash.logger.logs.error;
 	import org.osflash.logger.logs.info;
@@ -61,22 +62,25 @@ package org.osflash.net.http.loaders
 		{
 			super.start(queue);
 			
-			info("Start loading", _request.url, "(" + _request.method + ")");
-			
-			var requestHeaders : Array = _request.requestHeaders;
-			var n : int = requestHeaders.length;
-			while (--n > -1)
+			if(getDefaultLogger().enabled)
 			{
-                const urlRequestHeader : URLRequestHeader = requestHeaders[n];
-				info("\t", urlRequestHeader.name + ":" + urlRequestHeader.value);
-			}
-			if (_request.data != null && _request.data is URLVariables)
-			{
-				const urlVariables : URLVariables = URLVariables(_request.data);
+				info("Start loading", _request.url, "(" + _request.method + ")");
 				
-				for (var item : String in urlVariables)
+				var requestHeaders : Array = _request.requestHeaders;
+				var n : int = requestHeaders.length;
+				while (--n > -1)
 				{
-					info("\t", item + "=" + urlVariables[item]);
+	                const urlRequestHeader : URLRequestHeader = requestHeaders[n];
+					info("\t", urlRequestHeader.name + ":" + urlRequestHeader.value);
+				}
+				if (_request.data != null && _request.data is URLVariables)
+				{
+					const urlVariables : URLVariables = URLVariables(_request.data);
+					
+					for (var item : String in urlVariables)
+					{
+						info("\t", item + "=" + urlVariables[item]);
+					}
 				}
 			}
 			
@@ -108,26 +112,29 @@ package org.osflash.net.http.loaders
 		 */
 		override protected function handleCompleteSignal(event : Event) : void 
 		{
-			info("Complete:", _request.url);
-			
-			try
+			if(getDefaultLogger().enabled)
 			{
-				if (_loader.data is String)
+				info("Complete:", _request.url);
+				
+				try
 				{
-					debug(indent(new XML(String(_loader.data)).toXMLString()));
+					if (_loader.data is String)
+					{
+						debug(indent(new XML(String(_loader.data)).toXMLString()));
+					}
+	                else if (_loader.data is XML)
+					{
+						debug(indent(XML(_loader.data).toXMLString()));
+					}
+					else
+					{
+						debug("\t(Unknown)", _loader.data);
+					}
 				}
-                else if (_loader.data is XML)
+	            catch (e : Error)
 				{
-					debug(indent(XML(_loader.data).toXMLString()));
+					error(e);
 				}
-				else
-				{
-					debug("\t(Unknown)", _loader.data);
-				}
-			}
-            catch (e : Error)
-			{
-				error(e);
 			}
 			
 			super.handleCompleteSignal(event);
@@ -138,7 +145,10 @@ package org.osflash.net.http.loaders
 		 */
 		override protected function handleHTTPStatusSignal(event : HTTPStatusEvent) : void 
 		{
-			info("Status:", _request.url, HTTPStatusCode.codeToString(event.status));
+			if(getDefaultLogger().enabled)
+			{
+				info("Status:", _request.url, HTTPStatusCode.codeToString(event.status));
+			}
 			
 			super.handleHTTPStatusSignal(event);
 		}
@@ -148,26 +158,29 @@ package org.osflash.net.http.loaders
 		 */
 		override protected function handleIOErrorSignal(event : IOErrorEvent) : void 
 		{
-			error("IOError:", _request.url, event.text);
-
-			try
+			if(getDefaultLogger().enabled)
 			{
-				if (_loader.data is String)
+				error("IOError:", _request.url, event.text);
+	
+				try
 				{
-					error(indent(new XML(String(_loader.data)).toXMLString()));
+					if (_loader.data is String)
+					{
+						error(indent(new XML(String(_loader.data)).toXMLString()));
+					}
+	                else if (_loader.data is XML)
+					{
+						error(indent(XML(_loader.data).toXMLString()));
+					}
+					else
+					{
+						error("\t(Unknown)", _loader.data);
+					}
 				}
-                else if (_loader.data is XML)
+	            catch (e : Error)
 				{
-					error(indent(XML(_loader.data).toXMLString()));
+					error(e);
 				}
-				else
-				{
-					error("\t(Unknown)", _loader.data);
-				}
-			}
-            catch (e : Error)
-			{
-				error(e);
 			}
 			
 			super.handleIOErrorSignal(event);
@@ -178,7 +191,10 @@ package org.osflash.net.http.loaders
 		 */
 		override protected function handleSecurityErrorSignal(event : SecurityErrorEvent) : void 
 		{
-			error("SecurityError:", _request.url, event.text);
+			if(getDefaultLogger().enabled)
+			{
+				error("SecurityError:", _request.url, event.text);
+			}
 			
 			super.handleSecurityErrorSignal(event);
 		}
