@@ -239,6 +239,8 @@ package org.osflash.net.http.queues
 		 */
 		public function get length() : int { return (null == _active ? 0 : 1) + _queue.length; }
 		
+		net_namespace function get active() : IHTTPLoader { return _active; }
+		
 		net_namespace function get queue() : Vector.<IHTTPQueueBinding> { return _queue; }
 	}
 }

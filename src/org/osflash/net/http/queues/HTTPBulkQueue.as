@@ -1,5 +1,6 @@
 package org.osflash.net.http.queues
 {
+	import org.osflash.net.net_namespace;
 	import org.osflash.net.http.loaders.IHTTPLoader;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -104,6 +105,9 @@ package org.osflash.net.http.queues
 			}
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function get length() : int 
 		{ 
 			var total : int = 0;
@@ -115,5 +119,7 @@ package org.osflash.net.http.queues
 			}
 			return total;	
 		}
+		
+		net_namespace function get queues() : Vector.<IHTTPQueue> { return _queues; }
 	}
 }
