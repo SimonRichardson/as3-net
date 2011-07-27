@@ -41,6 +41,11 @@ package org.osflash.net.http.loaders
 		 * @private
 		 */
 		private var _cacheItem : IHTTPCacheItem;
+		
+		/**
+		 * @private
+		 */
+		private var _possibleCachedContent : Boolean;
 
 		public function HTTPURLLoader(loader : URLLoader, request : URLRequest)
 		{
@@ -51,6 +56,8 @@ package org.osflash.net.http.loaders
 			
 			_loader = loader;
 			_request = request;
+			
+			_possibleCachedContent = false;
 		}
 		
 		public static function fromURL(uri : String) : HTTPURLLoader
@@ -99,6 +106,8 @@ package org.osflash.net.http.loaders
 					info("Cache response", _request.url, "(" + _request.method + ")");
 				}
 				
+				_possibleCachedContent = true;
+				
 				// Response back with a successful sequence.
 				startSignal.dispatch(this);
 				handleHTTPStatusSignal(new HTTPStatusEvent(	HTTPStatusEvent.HTTP_STATUS,
@@ -110,6 +119,8 @@ package org.osflash.net.http.loaders
 			}
 			else
 			{
+				_possibleCachedContent = false;
+				
 				register();
 				
 				startSignal.dispatch(this);
@@ -239,8 +250,7 @@ package org.osflash.net.http.loaders
 		override public function get content() : * 
 		{
 			// Return the cached response as the loader might be gc'd?
-			if(null != cache && null != _cacheItem && null != _cacheItem.content) 
-				return _cacheItem.content;
+			if(null != _cacheItem && null != _cacheItem.content) return _cacheItem.content;
 			else return _loader.data; 
 		}
 		
@@ -267,6 +277,15 @@ package org.osflash.net.http.loaders
 				if(null == _cacheItem) cache.add(_cacheItem = new HTTPCacheItem(request.url));
 				else cache.add(_cacheItem);
 			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function get cachedContent() : Boolean
+		{
+			if(null == cache) return false;
+			else return _possibleCachedContent && null != _cacheItem.content;
 		}
 	}
 }

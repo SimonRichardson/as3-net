@@ -223,11 +223,17 @@ package org.osflash.net.http.loaders
 			if(_listening) securityErrorSignal.dispatch(this, event);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function get content() : * 
 		{
 			throw new Error('Abstract method');
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function get responseHeaders() : Array
 		{
 			throw new Error('Abstract method');
@@ -284,6 +290,14 @@ package org.osflash.net.http.loaders
 		 */
 		public function get cache() : IHTTPCache { return _cache; }
 		public function set cache(value : IHTTPCache) : void { _cache = value; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get cachedContent() : Boolean
+		{
+			throw new Error('Abstract method');
+		}
 		
 		/**
 		 * @private

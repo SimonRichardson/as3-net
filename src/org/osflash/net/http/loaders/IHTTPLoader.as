@@ -20,5 +20,7 @@ package org.osflash.net.http.loaders
 		
 		function get cache() : IHTTPCache;
 		function set cache(value : IHTTPCache) : void;
+		
+		function get cachedContent() : Boolean;
 	}
 }
