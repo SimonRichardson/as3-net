@@ -1,6 +1,6 @@
 package org.osflash.net.http.debug.monitor.adapters
 {
-	import org.osflash.debug.monitor.adapters.IMonitorAdapter;
+	import org.osflash.debug.monitor.adapters.BaseMonitorAdapter;
 	import org.osflash.net.http.queues.HTTPBulkQueue;
 	import org.osflash.net.http.queues.HTTPQueue;
 	import org.osflash.net.http.queues.IHTTPQueue;
@@ -10,7 +10,7 @@ package org.osflash.net.http.debug.monitor.adapters
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
-	public class HTTPBulkQueueMonitorAdapter implements IMonitorAdapter
+	public class HTTPBulkQueueMonitorAdapter extends BaseMonitorAdapter
 	{
 
 		use namespace net_namespace;
@@ -22,6 +22,8 @@ package org.osflash.net.http.debug.monitor.adapters
 		
 		public function HTTPBulkQueueMonitorAdapter(loader : HTTPBulkQueue)
 		{
+			super(loader);
+			
 			if(null == loader) throw new ArgumentError('Loader can not be null');
 			
 			_queue = loader;
@@ -30,7 +32,7 @@ package org.osflash.net.http.debug.monitor.adapters
 		/**
 		 * @inheritDoc
 		 */
-		public function get active() : int 
+		override public function get active() : int 
 		{ 
 			var num : int = 0;
 			
@@ -61,7 +63,7 @@ package org.osflash.net.http.debug.monitor.adapters
 		/**
 		 * @inheritDoc
 		 */
-		public function get free() : int 
+		override public function get free() : int 
 		{ 
 			var num : int = 0;
 			
@@ -80,6 +82,6 @@ package org.osflash.net.http.debug.monitor.adapters
 		/**
 		 * @inheritDoc
 		 */
-		public function get length() : int { return _queue.length; }
+		override public function get length() : int { return _queue.length; }
 	}
 }
