@@ -18,6 +18,8 @@ package org.osflash.net.http.debug.monitor.adapters
 		
 		public function HTTPQueueMonitorAdapter(loader : HTTPQueue)
 		{
+			super(loader);
+			
 			if(null == loader) throw new ArgumentError('Loader can not be null');
 			
 			_queue = loader;
